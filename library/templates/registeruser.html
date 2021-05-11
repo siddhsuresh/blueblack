@@ -1,0 +1,8 @@
+<form action = "" method = "post">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <hr>
+    {{ student_form.as_table}}
+    <hr/>
+    <input type="submit" value="Submit">
+</form>
