@@ -5,8 +5,8 @@
 ## Capabilites till now
 * Login Logout System and username in navbar
 * Can view all book from the website
-* [Not fully tried] Can return a book after been issued, though we need to still issue through the admin page only
-
+* Can issue and return books
+* Can show book copy w.r.t respective book and book w.r.t author
 ## To Test It out
 * Donwload the Code
 * Put the location of pip which comes with python in your computer variables path. Check youtube
