@@ -41,13 +41,18 @@
 	            {{ user.username }}
 	          </a>
 	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-	            <li><a class="dropdown-item" href="#">Profile</a></li>
+	            <li><a class="dropdown-item" href="/profile">Profile</a></li>
 	            <li><a class="dropdown-item" href="/viewissued">All Issued Books</a></li>
 	            <li><a class="dropdown-item" href="#">History</a></li>
 	          </ul>
 	        </li>
 	        {% endif %}
 	      </ul>
+	      {% if user.is_authenticated %}
+	      <form action="/admin">
+	        <button class="btn btn-outline-primary" type="submit">Go To Admin Page For Database</button>
+	      </form>
+	      {% endif %}
 	      {% if user.is_authenticated %}
 	      <form action="{% url 'logout' %}" class="d-flex">
 	        <button class="btn btn-outline-success" type="submit">Logout</button>

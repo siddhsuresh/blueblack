@@ -7,21 +7,27 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 
-@login_required(redirect_field_name='dashboard')  
+@login_required(redirect_field_name='dashboard')
 def add_book_view(request):
 	context ={}
 	form = NewBookForm(request.POST or None, request.FILES or None)
-      
+
 	if form.is_valid():
 		form.save()
-  
+
 	context['form']= form
 	return render(request, "addbook.html", context)
 
 @login_required(redirect_field_name='dashboard')
 def all_books_view(request):
-    dataset=Book.objects.all()     
+    dataset=Book.objects.all()
     return render(request, "allbooks.html", locals())
+
+@login_required(redirect_field_name='dashboard')
+def Author_view(request,pk):
+    author=Author.objects.get(id=pk)
+    books=Book.objects.filter(author=author)
+    return render(request, "author.html", locals())
 
 @login_required(redirect_field_name='dashboard')
 def get_issued_view(request):
@@ -35,8 +41,13 @@ def get_issued_view(request):
 @login_required(redirect_field_name='dashboard')
 def Individual_books_view(request,pk):
 	book=Book.objects.get(id=pk)
-	dataset=BookIndividual.objects.filter(book=book, status='a')   
+	dataset=BookIndividual.objects.filter(book=book, status='a')
 	return render(request, "books.html", locals())
+
+@login_required(redirect_field_name='dashboard')
+def Profile_view(request):
+	student=Student.objects.get(user=request.user)
+	return render(request, "profile.html", locals())
 
 @login_required(redirect_field_name='dashboard')
 def Book_Issue_View(request,pk):
@@ -59,7 +70,7 @@ def Book_Issue_View(request,pk):
 		book.save()
 	else:
 		messages.error(request, 'Book already taken try again!!')
-	return render(request, 'dashboard.html', locals())
+	return render(request, 'Dashboard.html', locals())
 
 @login_required(redirect_field_name='dashboard')
 def Book_Return_View(request,pk):
@@ -84,7 +95,7 @@ def Book_Return_View(request,pk):
 		r.save()
 		messages.error(request,'You have been fined!!')
 	messages.success(request,  'Your Book Has Been Successfully Returned')
-	return render(request, 'dashboard.html', locals())
+	return render(request, 'Dashboard.html', locals())
 """
 def registerPage(request):
 	context={}
@@ -94,14 +105,14 @@ def registerPage(request):
 
 		if form.is_valid() and student_form.is_valid():
 			user = form.save()
-			
+
 
 			student.save()
 
 			messages.success(request,  'Your account has been successfully created')
 
 			return redirect('login')
-			
+
 	context = {'form': form, 'student_form': student_form}
 	return render(request, 'registeruser.html', context)
 """

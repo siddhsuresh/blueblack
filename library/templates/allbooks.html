@@ -37,7 +37,7 @@
 	            {{ user.username }}
 	          </a>
 	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-	            <li><a class="dropdown-item" href="#">Profile</a></li>
+	            <li><a class="dropdown-item" href="/profile">Profile</a></li>
 	            <li><a class="dropdown-item" href="/viewissued">All Issued Books</a></li>
 	            <li><a class="dropdown-item" href="#">History</a></li>
 	          </ul>
@@ -60,6 +60,9 @@
   		<thead>
     		<tr>
       			<th scope="col">Book</th>
+      			<th scope="col">Author</th>
+      			<th scope="col">Language</th>
+      			<th scope="col">Genre</th>
       			<th scope="col">Actions</th>
     		</tr>
   		</thead>
@@ -67,6 +70,11 @@
   			{% for data in dataset %}
   			<tr>
   				<th>{{ data.title }}</th>
+  				<th><form action="{% url 'author' pk=data.author.id %}" class="d-flex">
+	        	<button class="btn btn-outline-primary" type="submit">{{data.author.name}}</button>
+	      		</form></th>
+	      		<th>{{ data.language.name }}</th>
+	      		<th>{{data.display_genre}}</th>
   				<th><form action="{% url 'book' pk=data.id %}" class="d-flex">
 	        	<button class="btn btn-outline-primary" type="submit">View</button>
 	      		</form></th>
