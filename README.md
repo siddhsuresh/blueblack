@@ -24,9 +24,9 @@
 * * pip install -r requirements.txt
 * * If the above is not working just use pip install django and pip install xhtml2pdf
 * Then go to the location where you have saved the code and in that location in command prompt use 
-* * python manage.py makemigrations
-* * python manage.py migrate
-* * python manage.py runserver
+** python manage.py makemigrations
+** python manage.py migrate
+** python manage.py runserver
 * This would start the local host server at http://127.0.0.1:8000/
 * http://127.0.0.1:8000/admin is for the admin page
 
