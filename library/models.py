@@ -19,7 +19,7 @@ class Author(models.Model):
     name = models.CharField(max_length=100)
     GEN = (('n',''),('m','Male'),('f','Female'),('o','Other'))
     gender = models.CharField(max_length=15, choices=GEN, default='n', blank=True)
-    bio = models.CharField(max_length=200, default=' ')
+    bio = models.CharField(max_length=1000, default=' ')
     nationality= models.CharField(max_length=50, default=' ')
 
     def __str__(self):
@@ -64,6 +64,7 @@ class IssueBook(models.Model):
         return self.student.name+" has been issued "+self.borrowed_book.book.title+" on "+str(self.issue_date)
 
 class ReturnBook(models.Model):
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
     borrowed_book = models.OneToOneField('IssueBook', on_delete = models.CASCADE , null=True, blank=True)
     actual_return_date = models.DateTimeField(null=True,blank=True)
     is_fined = models.BooleanField(default=False)
@@ -72,7 +73,7 @@ class ReturnBook(models.Model):
 
 class Student(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	roll_no = models.CharField(max_length=10,unique=True)
+	roll_no = models.CharField(max_length=10)
 	name = models.CharField(max_length=20)
 	branch = models.CharField(max_length=3)
 	DEPT = ( ('1', 'CSE'), ('2', 'ECE'), ('3','EEE'),('4','ME'))
@@ -83,7 +84,7 @@ class Student(models.Model):
 	semester = models.CharField(max_length=1, choices=SEM, blank=True, default='1',help_text="Choose you semester")
 	total_books_due=models.IntegerField(default=0)
 	fine = models.IntegerField(default=0)
-	email=models.EmailField(unique=True)
+	email=models.EmailField()
 	def __str__(self):
 		return str(self.roll_no)
 """

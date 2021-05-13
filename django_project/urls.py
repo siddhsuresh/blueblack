@@ -22,6 +22,7 @@ from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('history/', student_render_pdf_view, name='history'),
     path('addbook/', add_book_view),
     path('allbooks/', all_books_view),
     path('profile/', Profile_view),
