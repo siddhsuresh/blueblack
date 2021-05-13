@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<title> History {{student.roll_no}}</title>
+    </head>
+	<body>
+    <h1><center>{{student.name}}</center></h1>
+    <h1><center>{{student.roll_no}}</center></h1>
+    <h2><center>Return Book History</center></h1>
+		<table>
+  		<thead>
+    		<tr>
+      			<th scope>Book</th>
+      			<th>Author</th>
+      			<th>Language</th>
+      			<th>Genre</th>
+      			<th>Issue Date and Time</th>
+      			<th>Expected Return Date and Time</th>
+      		  <th>Actual Return Date and Time</th>
+      			<th>Fine</th>
+    		</tr>
+  		</thead>
+  		<tbody>
+  			{% for r in ret %}
+  			<tr>
+	      		<td><center>{{ r.borrowed_book.borrowed_book.book.title }}</center></td>
+	      		<td><center>{{ r.borrowed_book.borrowed_book.book.author.name }}</center></td>
+	      		<td><center>{{ r.borrowed_book.borrowed_book.book.language.name }}</center></td>
+	      		<td><center>{{ r.borrowed_book.borrowed_book.book.display_genre }}</center></td>
+	      		<td><center>{{ r.borrowed_book.issue_date }}</td>
+	      		<td><center>{{ r.borrowed_book.expected_return_date }}</td>
+	      	  <td><center>{{ r.actual_return_date}}</center></td>
+	      		{% if r.is_fined %}
+	      		<td><center>100</center></td>
+	      		{% else %}
+	      		<td><center>0</center></td>
+	      		{% endif %}
+  			</tr>
+     		{% endfor %}
+		</tbody>
+	    </table>
+    </body>
+</html>
