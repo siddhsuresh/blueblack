@@ -1,4 +1,3 @@
-# LIBRARY DATABSE MANAGEMENT
 ### Test Project using Django
 
 ## Important Files to view:
