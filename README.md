@@ -1,6 +1,11 @@
 # LIBRARY DATABSE MANAGEMENT
-### Test Project using Django and HTML
+### Test Project using Django
 
+## Important Files to view:
+* models.py in library folder which holds all the tables [in form of python classes] with all the relations, pls check and inform if any improvements possible
+* views.py in library folder does almost everything for the back-end
+* urls.py in djang_project folder informs django on what view to do to for a given url
+* admin.py hold the code to link the models to the admin page which is used to view and change the data in the database.
 
 ## Capabilites till now
 * Login Logout System and username in navbar
@@ -15,7 +20,7 @@
 * Donwload the Code
 * Put the location of pip which comes with python in your computer variables path. Check youtube
 * in your command prompt write
-* ->  pip install django
+* * pip install django
 * Then go to the location where you have saved the code and in that location in command prompt use 
 * -> python manage.py makemigrations
 * -> python manage.py migrate
