@@ -20,7 +20,7 @@
 * Donwload the Code
 * Put the location of pip which comes with python in your computer variables path. Check youtube
 * in your command prompt write
-* * pip install django
+* pip install -r requirements.txt
 * Then go to the location where you have saved the code and in that location in command prompt use 
 * -> python manage.py makemigrations
 * -> python manage.py migrate
