@@ -6,7 +6,11 @@
 * Login Logout System and username in navbar
 * Can view all book from the website
 * Can issue and return books
+* Can view all issued books
+* Can view all returned book in pdf form
 * Can show book copy w.r.t respective book and book w.r.t author
+* To view without downloading go to https://blueblack.pythonanywhere.com
+
 ## To Test It out
 * Donwload the Code
 * Put the location of pip which comes with python in your computer variables path. Check youtube
