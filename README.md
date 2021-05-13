@@ -1,13 +1,12 @@
 # LIBRARY DATABSE MANAGEMENT
 ### Test Project using Django
 
-### models.sql holds the sql commands used by django to create the database in sqlite3 [just to see]
-
 ## Important Files to view:
 * models.py in library folder which holds all the tables [in form of python classes] with all the relations, pls check and inform if any improvements possible
 * views.py in library folder does almost everything for the back-end
 * urls.py in djang_project folder informs django on what view to do to for a given url
 * admin.py hold the code to link the models to the admin page which is used to view and change the data in the database.
+* models.sql holds the sql commands used by django to create the database in sqlite3 [just to see]
 
 ## Capabilites till now
 * Login Logout System and username in navbar
@@ -31,4 +30,5 @@
 * This would start the local host server at http://127.0.0.1:8000/
 * http://127.0.0.1:8000/admin is for the admin page
 
-#### THE DATABSE IS RIGHT NOW STORED IN THE db.sqlite3 FILE AND YOU CAN EVEN CHECK IT OUT UPLOADING IT TO AN ONLINE SQLITE IDE LIKE https://sqliteonline.com/
+## THE DATABSE 
+* The databse is stored in sqlite3 format and is in db.sqlite3 file and can be viewed in an sqlite3 IDE like https://sqliteonline.com/
