@@ -32,6 +32,21 @@ def Author_view(request,pk):
     return render(request, "author.html", locals())
 
 @login_required(redirect_field_name='dashboard')
+def Search_View(request):
+	flag=False
+	if request.method=='POST':
+		flag=True
+		search = request.POST.get('search')
+		book_count=Book.objects.filter(title__contains=search).count()
+		author_count=Author.objects.filter(name__contains=search).count()
+		if book_count>0:
+			books=Book.objects.filter(title__contains=search)
+		if author_count>0:
+			authors=Author.objects.filter(name__contains=search)	
+
+	return render(request, "search.html", locals())
+
+@login_required(redirect_field_name='dashboard')
 def get_issued_view(request):
 	student=Student.objects.get(user=request.user)
 	iss=IssueBook.objects.filter(student=student, is_returned=False)

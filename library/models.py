@@ -5,12 +5,12 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class Genre(models.Model):
-	name = models.CharField(max_length=200, help_text="")
+	name = models.CharField(max_length=100)
 	def __str__(self):
 		return self.name
 
 class Language(models.Model):
-    name = models.CharField(max_length=200, help_text="")
+    name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -25,27 +25,34 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
-class Book(models.Model):
-	title = models.CharField(max_length=200)
-	author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
-	summary = models.TextField(max_length=1000, help_text="Enter a brief description of the book")
-	isbn = models.CharField('ISBN', max_length=13, unique=True, help_text='')
-	genre = models.ManyToManyField(Genre, help_text="")
-	language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
-	total_book = models.IntegerField(default=0)
-	available_books = models.IntegerField(default=0)
+class Publisher(models.Model):
+    name = models.CharField(max_length=100)
+    author = models.ManyToManyField('Author')
 
-	class Meta:
-		ordering = ['title', 'author']
-	def display_genre(self):
-		return ', '.join(genre.name for genre in self.genre.all()[:3])
-	def __str__(self):
-		return self.title
+    def __str__(self):
+        return self.name
+
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
+    publisher= models.ForeignKey('Publisher', on_delete=models.SET_NULL, null=True)
+    summary = models.TextField(max_length=1000, help_text="Enter a brief description of the book")
+    isbn = models.CharField('ISBN', max_length=13, unique=True, help_text='')
+    genre = models.ManyToManyField(Genre)
+    language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
+    total_book = models.IntegerField(default=0)
+    available_books = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['title', 'author']
+    def display_genre(self):
+        return ', '.join(genre.name for genre in self.genre.all()[:3])
+    def __str__(self):
+        return self.title
 
 
 class BookIndividual(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4,
-                          help_text="")
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     book = models.ForeignKey('Book', on_delete=models.CASCADE, null=True)
     edition = models.IntegerField(default=0)
     LOAN_STATUS = ( ('o', 'Not Available'), ('a', 'Available'))
@@ -72,21 +79,21 @@ class ReturnBook(models.Model):
         return self.borrowed_book.student.name+" has returned "+self.borrowed_book.borrowed_book.book.title+" on "+str(self.actual_return_date)
 
 class Student(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	roll_no = models.CharField(max_length=10)
-	name = models.CharField(max_length=20)
-	branch = models.CharField(max_length=3)
-	DEPT = ( ('1', 'CSE'), ('2', 'ECE'), ('3','EEE'),('4','ME'))
-	department = models.CharField(max_length=1, choices=DEPT, blank=True, default='1', help_text='Choose your department')
-	BAT = (('1','2017'),('2','2018'),('3','2019'),('4','2020'))
-	batch = models.CharField(max_length=1, choices=BAT, blank=True, default='4', help_text="Choose your batch")
-	SEM = (('1','1'),('2','2'),('3','3'),('4','4'),('5','5'),('6','6'),('7','7'),('8','8'))
-	semester = models.CharField(max_length=1, choices=SEM, blank=True, default='1',help_text="Choose you semester")
-	total_books_due=models.IntegerField(default=0)
-	fine = models.IntegerField(default=0)
-	email=models.EmailField()
-	def __str__(self):
-		return str(self.roll_no)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    roll_no = models.CharField(max_length=10)
+    name = models.CharField(max_length=20)
+    branch = models.CharField(max_length=3)
+    DEPT = ( ('1', 'CSE'), ('2', 'ECE'), ('3','EEE'),('4','ME'))
+    department = models.CharField(max_length=1, choices=DEPT, blank=True, default='1', help_text='Choose your department')
+    BAT = (('1','2017'),('2','2018'),('3','2019'),('4','2020'))
+    batch = models.CharField(max_length=1, choices=BAT, blank=True, default='4', help_text="Choose your batch")
+    SEM = (('1','1'),('2','2'),('3','3'),('4','4'),('5','5'),('6','6'),('7','7'),('8','8'))
+    semester = models.CharField(max_length=1, choices=SEM, blank=True, default='1',help_text="Choose you semester")
+    total_books_due=models.IntegerField(default=0)
+    fine = models.IntegerField(default=0)
+    email=models.EmailField()
+    def __str__(self):
+        return str(self.roll_no)
 """
 def create_profile(sender, **kwargs):
     user = kwargs["instance"]
