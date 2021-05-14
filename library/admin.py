@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook
+from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook, Publisher
 
 class BookIndividualInline(admin.TabularInline):
     model = BookIndividual
@@ -16,6 +16,13 @@ class IssueBookInline(admin.TabularInline):
 class BookAdmin(admin.ModelAdmin):
     list_display = ('id', 'book', 'edition')
     inlines = [IssueBookInline]    
+
+class BookInline(admin.TabularInline):
+	model = Book
+
+@admin.register(Publisher)
+class BookAdmin(admin.ModelAdmin):
+	inlines = [BookInline] 
 
 admin.site.register(Author)
 admin.site.register(Genre)

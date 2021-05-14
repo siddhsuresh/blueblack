@@ -25,6 +25,7 @@ urlpatterns = [
     path('history/', student_render_pdf_view, name='history'),
     path('addbook/', add_book_view),
     path('allbooks/', all_books_view),
+    path('search/', Search_View),
     path('profile/', Profile_view),
     path('<int:pk>/author', Author_view,  name='author'),
     path('viewissued/', get_issued_view),
