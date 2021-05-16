@@ -25,7 +25,7 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
-class Publisher(models.Model):
+class PublishingHouse(models.Model):
     name = models.CharField(max_length=100)
     author = models.ManyToManyField('Author')
 
@@ -35,21 +35,18 @@ class Publisher(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
-    publisher= models.ForeignKey('Publisher', on_delete=models.SET_NULL, null=True)
+    publisher= models.ForeignKey('PublishingHouse', on_delete=models.SET_NULL, null=True)
     summary = models.TextField(max_length=1000, help_text="Enter a brief description of the book")
     isbn = models.CharField('ISBN', max_length=13, unique=True, help_text='')
     genre = models.ManyToManyField(Genre)
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
-    total_book = models.IntegerField(default=0)
-    available_books = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['title', 'author']
     def display_genre(self):
-        return ', '.join(genre.name for genre in self.genre.all()[:3])
+        return ', '.join(genre.name for genre in self.genre.all())
     def __str__(self):
         return self.title
-
 
 class BookIndividual(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
@@ -57,6 +54,10 @@ class BookIndividual(models.Model):
     edition = models.IntegerField(default=0)
     LOAN_STATUS = ( ('o', 'Not Available'), ('a', 'Available'))
     status = models.CharField( max_length=1, choices=LOAN_STATUS, blank=True, default='a', help_text='')
+    
+    class Meta:
+        ordering = ['edition']
+
     def __str__(self):
         return '{0} ({1})'.format(self.id, self.book.title)
 
@@ -67,6 +68,7 @@ class IssueBook(models.Model):
     issue_date = models.DateTimeField(null=True,blank=True)
     expected_return_date = models.DateTimeField(null=True,blank=True)
     is_returned = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.student.name+" has been issued "+self.borrowed_book.book.title+" on "+str(self.issue_date)
 
@@ -94,6 +96,7 @@ class Student(models.Model):
     email=models.EmailField()
     def __str__(self):
         return str(self.roll_no)
+
 """
 def create_profile(sender, **kwargs):
     user = kwargs["instance"]

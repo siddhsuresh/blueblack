@@ -13,8 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import debug_toolbar
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from library.views import *
 from django.conf.urls import url
 from django.contrib.auth.views import LoginView, LogoutView
@@ -28,12 +29,13 @@ urlpatterns = [
     path('search/', Search_View),
     path('profile/', Profile_view),
     path('<int:pk>/author', Author_view,  name='author'),
-    path('viewissued/', get_issued_view),
+    path('viewissued/', get_issued_view, name='all_issued'),
     path('<int:pk>/return/', Book_Return_View, name='book_return'),
     path('<int:pk>/book/', Individual_books_view, name='book'),
     path('<uuid:pk>/issue/', Book_Issue_View, name='book_issue'),
     #path('register/', registerPage),
-    url(r'^$', TemplateView.as_view(template_name='Dashboard.html'), name='dashboard'),
+    path('', View_Dashboard, name='dashboard'),
     url(r'^login/$', LoginView.as_view(template_name='login.html'), name='login'),
     url(r'^logout/$', LogoutView.as_view(template_name='logged_out.html'), name='logout'),
+    path('__debug__/',include(debug_toolbar.urls)),
 ]

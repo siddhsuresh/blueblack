@@ -6,10 +6,24 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
+from django.utils import timezone
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 
+def View_Dashboard(request):
+	if request.user.is_authenticated:
+		student=Student.objects.get(user=request.user)
+		c=IssueBook.objects.filter(student=student, is_returned=False).count()
+		if c:
+			i1=IssueBook.objects.filter(student=student, is_returned=False).first()
+			i2=IssueBook.objects.filter(student=student).last()
+			time1 = i1.expected_return_date
+			time=timezone.now()
+			time1-=time
+			time_left = time1.total_seconds()//3600
+			print(time_left)
+	return render(request, "Dashboard.html", locals())
 @login_required(redirect_field_name='dashboard')
 def add_book_view(request):
 	context ={}
@@ -75,12 +89,14 @@ def Book_Issue_View(request,pk):
 		return_date=issue_date+timedelta(days = 1)
 		iss=IssueBook(student=student, borrowed_book=book, issue_date=issue_date, expected_return_date=return_date)
 		iss.save()
-		messages.success(request,  'Your Book Has Been Successfully Issued')
+		messages.success(request, 'Your Book Has Been Successfully Issued')
+		student.total_books_due+=1
+		student.save()
 		book.status = 'o'
 		book.save()
 	else:
 		messages.error(request, 'Book already taken try again!!')
-	return render(request, 'Dashboard.html', locals())
+	return redirect('/', locals())
 
 @login_required(redirect_field_name='dashboard')
 def Book_Return_View(request,pk):
@@ -101,7 +117,9 @@ def Book_Return_View(request,pk):
 		r.save()
 		messages.error(request,'You have been fined!!')
 	messages.success(request,  'Your Book Has Been Successfully Returned')
-	return render(request, 'Dashboard.html', locals())
+	student.total_books_due-=1
+	student.save()
+	return redirect('/', locals())
 
 @login_required(redirect_field_name='dashboard')
 def student_render_pdf_view(request):
