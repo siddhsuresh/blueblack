@@ -18,7 +18,7 @@ class BookAdmin(admin.ModelAdmin):
     inlines = [IssueBookInline]    
 
 class BookInline(admin.TabularInline):
-	model = Book
+	model = Author
 
 @admin.register(PublishingHouse)
 class BookAdmin(admin.ModelAdmin):

@@ -1,8 +1,6 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 class Genre(models.Model):
 	name = models.CharField(max_length=100)
@@ -17,6 +15,7 @@ class Language(models.Model):
 
 class Author(models.Model):
     name = models.CharField(max_length=100)
+    publisher = models.ForeignKey('PublishingHouse', on_delete=models.SET_NULL, null=True, blank=True)
     GEN = (('n',''),('m','Male'),('f','Female'),('o','Other'))
     gender = models.CharField(max_length=15, choices=GEN, default='n', blank=True)
     bio = models.CharField(max_length=1000, default=' ')
@@ -27,7 +26,6 @@ class Author(models.Model):
 
 class PublishingHouse(models.Model):
     name = models.CharField(max_length=100)
-    author = models.ManyToManyField('Author')
 
     def __str__(self):
         return self.name
@@ -35,9 +33,8 @@ class PublishingHouse(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
-    publisher= models.ForeignKey('PublishingHouse', on_delete=models.SET_NULL, null=True)
-    summary = models.TextField(max_length=1000, help_text="Enter a brief description of the book")
-    isbn = models.CharField('ISBN', max_length=13, unique=True, help_text='')
+    summary = models.TextField(max_length=1000)
+    isbn = models.CharField('ISBN', max_length=13, unique=True)
     genre = models.ManyToManyField(Genre)
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
 
@@ -96,12 +93,3 @@ class Student(models.Model):
     email=models.EmailField()
     def __str__(self):
         return str(self.roll_no)
-
-"""
-def create_profile(sender, **kwargs):
-    user = kwargs["instance"]
-    if kwargs["created"]:
-        user_profile = Student(user=user)
-        user_profile.save()
-post_save.connect(create_profile, sender=User)
-"""

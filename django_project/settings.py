@@ -144,4 +144,4 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
                 message_constants.WARNING: 'warning',
                 message_constants.ERROR: 'danger',}
 
-INTERNAL_IPS = ['127.0.0.1']
+INTERNAL_IPS = [ 'blueblack.pythonanywhere.com','127.0.0.1']

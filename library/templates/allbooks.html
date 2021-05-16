@@ -60,6 +60,7 @@
     		<tr>
       			<th scope="col">Book</th>
       			<th scope="col">Author</th>
+      			<th scope="col">Publisher</th>
       			<th scope="col">Language</th>
       			<th scope="col">Genre</th>
       			<th scope="col">Actions</th>
@@ -72,6 +73,7 @@
   				<th><form action="{% url 'author' pk=data.author.id %}" class="d-flex">
 	        	<button class="btn btn-outline-primary" type="submit">{{data.author.name}}</button>
 	      		</form></th>
+	      		<th>{{ data.author.publisher.name }}</th>
 	      		<th>{{ data.language.name }}</th>
 	      		<th>{{data.display_genre}}</th>
   				<th><form action="{% url 'book' pk=data.id %}" class="d-flex">
