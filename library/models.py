@@ -70,7 +70,6 @@ class IssueBook(models.Model):
         return self.student.name+" has been issued "+self.borrowed_book.book.title+" on "+str(self.issue_date)
 
 class ReturnBook(models.Model):
-    student = models.ForeignKey('Student', on_delete=models.CASCADE)
     borrowed_book = models.OneToOneField('IssueBook', on_delete = models.CASCADE , null=True, blank=True)
     actual_return_date = models.DateTimeField(null=True,blank=True)
     is_fined = models.BooleanField(default=False)
