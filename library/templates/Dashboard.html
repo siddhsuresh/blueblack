@@ -109,6 +109,11 @@
 			    <div class="p-3 border bg-light fw-bold"><a href="{% url 'all_issued' %}"> {{i1.borrowed_book.book.title}}</a></div>
 			    <div class="p-3 border bg-light fw-bold"><a href="{% url 'all_issued' %}">ID: {{i1.borrowed_book.id}}</a></div>
 			</div>
+			<div class="col-5 bg text-center">
+			    <div class="p-3 border bg-danger text-light fw-bold">MOST POPULAR BOOK</div>
+			    <div class="p-3 border bg-light fw-bold">{{most_popular_book}}</div>
+			    <div class="p-3 border bg-light fw-bold">With {{number_of_time_issued}} books issued</div>
+			</div>
 		</div>
 	</div>
 	{% endif %}

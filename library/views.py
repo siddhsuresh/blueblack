@@ -1,6 +1,7 @@
 from .forms import NewBookForm, NewStudentForm
 from django.contrib.auth.forms import UserCreationForm
 from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook
+from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -14,6 +15,13 @@ from xhtml2pdf import pisa
 def View_Dashboard(request):
 	if request.user.is_authenticated:
 		student=Student.objects.get(user=request.user)
+		c_i=IssueBook.objects.all().count()
+		if c_i:
+			result = IssueBook.objects.values('borrowed_book__book__title').annotate(count=Count('borrowed_book'))
+			r=result.order_by('-count').first()
+			most_popular_book=r['borrowed_book__book__title']
+			number_of_time_issued = r['count']
+			print(most_popular_book,number_of_time_issued)
 		c=IssueBook.objects.filter(student=student, is_returned=False).count()
 		if c:
 			i1=IssueBook.objects.filter(student=student, is_returned=False).first()
@@ -22,7 +30,6 @@ def View_Dashboard(request):
 			time=timezone.now()
 			time1-=time
 			time_left = time1.total_seconds()//3600
-			print(time_left)
 	return render(request, "Dashboard.html", locals())
 @login_required(redirect_field_name='dashboard')
 def add_book_view(request):
@@ -106,7 +113,7 @@ def Book_Return_View(request,pk):
 	iss.save()
 	iss.borrowed_book.status='a'
 	iss.borrowed_book.save()
-	r = ReturnBook(student=student, borrowed_book=iss,actual_return_date=datetime.now())
+	r = ReturnBook(borrowed_book=iss,actual_return_date=datetime.now())
 	r.save()
 	time1 = r.borrowed_book.expected_return_date.replace(tzinfo=None)
 	time2 = r.actual_return_date.replace(tzinfo=None)
@@ -125,7 +132,7 @@ def Book_Return_View(request,pk):
 def student_render_pdf_view(request):
     template_path = 'history.html'
     student=Student.objects.get(user=request.user)
-    ret= ReturnBook.objects.filter(student=student)
+    ret= ReturnBook.objects.filter(borrowed_book__student=student)
     #ret=ReturnBook.objects.filter(borrowed_book=iss).first()
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
