@@ -111,7 +111,7 @@
 			</div>
 			<div class="col-5 bg text-center">
 			    <div class="p-3 border bg-danger text-light fw-bold">MOST POPULAR BOOK</div>
-			    <div class="p-3 border bg-light fw-bold">{{most_popular_book}}</div>
+			    <div class="p-3 border bg-light fw-bold"><a href="{% url 'book' pk=book.id%}">{{book.title}}</a></div>
 			    <div class="p-3 border bg-light fw-bold">With {{number_of_time_issued}} books issued</div>
 			</div>
 		</div>

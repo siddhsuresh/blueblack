@@ -1,6 +1,10 @@
 from django.contrib import admin
 from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook, PublishingHouse
 
+admin.site.site_header = "Library Admin"
+admin.site.site_title = "Library Admin Portal"
+admin.site.index_title = "Welcome to Library Database Management Portal"
+
 class BookIndividualInline(admin.TabularInline):
     model = BookIndividual
 

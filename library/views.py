@@ -19,9 +19,9 @@ def View_Dashboard(request):
 		if c_i:
 			result = IssueBook.objects.values('borrowed_book__book__title').annotate(count=Count('borrowed_book'))
 			r=result.order_by('-count').first()
-			most_popular_book=r['borrowed_book__book__title']
+			name=r['borrowed_book__book__title']
 			number_of_time_issued = r['count']
-			print(most_popular_book,number_of_time_issued)
+			book = Book.objects.get(title=name)
 		c=IssueBook.objects.filter(student=student, is_returned=False).count()
 		if c:
 			i1=IssueBook.objects.filter(student=student, is_returned=False).first()
@@ -92,7 +92,7 @@ def Book_Issue_View(request,pk):
 	student=Student.objects.get(user=request.user)
 	book=BookIndividual.objects.get(id=pk)
 	if book.status=='a':
-		issue_date=datetime.now()
+		issue_date=timezone.now()
 		return_date=issue_date+timedelta(days = 1)
 		iss=IssueBook(student=student, borrowed_book=book, issue_date=issue_date, expected_return_date=return_date)
 		iss.save()
@@ -113,7 +113,7 @@ def Book_Return_View(request,pk):
 	iss.save()
 	iss.borrowed_book.status='a'
 	iss.borrowed_book.save()
-	r = ReturnBook(borrowed_book=iss,actual_return_date=datetime.now())
+	r = ReturnBook(borrowed_book=iss,actual_return_date=timezone.now())
 	r.save()
 	time1 = r.borrowed_book.expected_return_date.replace(tzinfo=None)
 	time2 = r.actual_return_date.replace(tzinfo=None)
