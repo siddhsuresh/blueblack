@@ -31,6 +31,7 @@ def View_Dashboard(request):
 			time1-=time
 			time_left = time1.total_seconds()//3600
 	return render(request, "Dashboard.html", locals())
+
 @login_required(redirect_field_name='dashboard')
 def add_book_view(request):
 	context ={}
@@ -43,7 +44,7 @@ def add_book_view(request):
 	return render(request, "addbook.html", context)
 
 def all_books_view(request):
-    dataset=Book.objects.all()
+    books=Book.objects.all()
     return render(request, "allbooks.html", locals())
 
 @login_required(redirect_field_name='dashboard')
@@ -60,20 +61,20 @@ def Search_View(request):
 		search = request.POST.get('search')
 		book_count=Book.objects.filter(title__contains=search).count()
 		author_count=Author.objects.filter(name__contains=search).count()
+		book_genre_count = Book.objects.filter(genre__name__iexact=search).count()
 		if book_count>0:
 			books=Book.objects.filter(title__contains=search)
 		if author_count>0:
-			authors=Author.objects.filter(name__contains=search)	
+			authors=Author.objects.filter(name__contains=search)		
+		if book_genre_count>0:
+			book_genre = Book.objects.filter(genre__name__iexact=search)
 
 	return render(request, "search.html", locals())
 
 @login_required(redirect_field_name='dashboard')
 def get_issued_view(request):
 	student=Student.objects.get(user=request.user)
-	iss=IssueBook.objects.filter(student=student, is_returned=False)
-	book_list=[]
-	for i in iss:
-		book_list.append(i)
+	book_list=IssueBook.objects.filter(student=student, is_returned=False)
 	return render(request, 'viewissued.html', locals())
 
 @login_required(redirect_field_name='dashboard')
@@ -168,3 +169,21 @@ def registerPage(request):
 	context = {'form': form, 'student_form': student_form}
 	return render(request, 'registeruser.html', context)
 """
+@login_required(redirect_field_name='dashboard')
+def View_Staff_Dashboard(request):
+	if not request.user.is_staff:
+		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
+		return redirect('/', locals())
+	labels = []
+	data = []
+	result = IssueBook.objects.values('borrowed_book__book__title').annotate(count=Count('borrowed_book'))
+	ordered_result=result.order_by('-count')[:5]
+	for r in ordered_result:
+		labels.append(r['borrowed_book__book__title'])
+		data.append(r['count'])
+	return render(request, 'staff_dashboard.html', locals())
+
+@login_required(redirect_field_name='dashboard')
+def View_Staff_AllStudents(request):
+	students=Student.objects.all()
+	return render(request,'staff_allusers.html',locals())

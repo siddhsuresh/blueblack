@@ -5,11 +5,17 @@
     	<meta name="viewport" content="width=device-width, initial-scale=1">
 
     	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    	<style>
+    	a {
+			color: black;
+			text-decoration: none;
+		}
+    	</style>
 	</head>
 	<body>
-		<nav class="navbar nav-pills navbar-expand-lg navbar-dark bg-dark">
+		<nav class="navbar nav-pills navbar-expand-lg bg-light">
 	  <div class="container-fluid">
-	    <a class="navbar-brand" href="#">Library</a>
+	    <a class="navbar-brand" href="#">Library Student</a>
 	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	      <span class="navbar-toggler-icon"></span>
 	    </button>
@@ -59,24 +65,28 @@
   		<thead>
     		<tr>
       			<th scope="col">Book</th>
-      			<th scope="col">Author</th>
-      			<th scope="col">Publisher</th>
-      			<th scope="col">Language</th>
-      			<th scope="col">Genre</th>
+      			<th scope="col" class="text-center">Author</th>
+      			<th scope="col" class="text-center">Publisher</th>
+      			<th scope="col" class="text-center">Language</th>
+      			<th scope="col" class="text-center">Genre</th>
+      			<th scope="col" class="text-center">Number of Books Availabe</th>
       			<th scope="col">Actions</th>
     		</tr>
   		</thead>
   		<tbody>
-  			{% for data in dataset %}
+  			{% for b in books %}
   			<tr>
-  				<th>{{ data.title }}</th>
-  				<th><form action="{% url 'author' pk=data.author.id %}" class="d-flex">
-	        	<button class="btn btn-outline-primary" type="submit">{{data.author.name}}</button>
-	      		</form></th>
-	      		<th>{{ data.author.publisher.name }}</th>
-	      		<th>{{ data.language.name }}</th>
-	      		<th>{{data.display_genre}}</th>
-  				<th><form action="{% url 'book' pk=data.id %}" class="d-flex">
+  				<th>{{ b.title }}</th>
+  				<th><a href="{% url 'author' pk=b.author.id %}"><p class="text-center text-primary">{{b.author.name}}</p></a></th>
+	      		<th class="text-center">{{ b.author.publisher.name }}</th>
+	      		<th class="text-center">{{ b.language.name }}</th>
+	      		<th class="text-center">{{ b.display_genre }}</th>
+	      		{% if b.num_books %}
+	      		<th class="text-success text-center">{{ b.num_books }}</th>
+	      		{% else %}
+	      		<th class="text-danger text-center">{{ b.num_books }}</th>
+	      		{% endif %}
+  				<th><form action="{% url 'book' pk=b.id %}" class="d-flex">
 	        	<button class="btn btn-outline-primary" type="submit">View</button>
 	      		</form></th>
   			</tr>
