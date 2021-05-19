@@ -34,6 +34,8 @@ urlpatterns = [
     path('<uuid:pk>/issue/', Book_Issue_View, name='book_issue'),
     #path('register/', registerPage),
     path('', View_Dashboard, name='dashboard'),
+    path('staff/',View_Staff_Dashboard, name='staff_dashboard'),
+    path('staff/allstudents', View_Staff_AllStudents, name='staff_allstudents'),
     url(r'^login/$', LoginView.as_view(template_name='login.html'), name='login'),
     url(r'^logout/$', LogoutView.as_view(template_name='logged_out.html'), name='logout'),
     path('__debug__/',include(debug_toolbar.urls)),

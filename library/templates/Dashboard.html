@@ -11,9 +11,9 @@
     <title>Dashboard</title>
     <style>
     	a {
-	color: black;
-	text-decoration: none;
-	    }
+			color: black;
+			text-decoration: none;
+		}
     </style>
   </head>
   <body>
@@ -25,9 +25,13 @@
 			</div>
 		   {% endfor %}
 	{% endif %}
-  	<nav class="navbar nav-pills navbar-expand-lg navbar-dark bg-dark">
+  	<nav class="navbar nav-pills navbar-expand-lg bg-light">
 	  <div class="container-fluid">
-	    <a class="navbar-brand" href="#">Library</a>
+	    <a class="navbar-brand" href="#">
+	    {% if user.is_authenticated %} Library Student
+	    {% else %} Library
+	    {% endif %}
+		</a>
 	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	      <span class="navbar-toggler-icon"></span>
 	    </button>
@@ -38,7 +42,7 @@
 	        </li>
 	        {% if user.is_staff %}
 	        <li class="nav-item">
-	          <a class="nav-link" aria-current="page" href="/admin">Admin</a>
+	          <a class="nav-link" aria-current="page" href="/staff">Staff</a>
 	        </li>
 	         {% endif %}
 	        <li class="nav-item dropdown active">
@@ -79,12 +83,12 @@
 	  </div>
 	</nav>
 	{% if user.is_authenticated %}
+	<p class="fs-2 text-uppercase fw-bolder text-center">Student Information</p>
 	<br>
-	<br>
-	<div class="container">
+	<div class="container float-right">
 	  <div class="row text-center">
-		<div class="col-3">
-			<div class="p-3 border bg-primary text-light fw-bold">Number of Books Due</div>
+			<div class="col-3">
+			    <div class="p-3 border bg-primary text-light fw-bold">Number of Books Due</div>
 			    <div class="p-2 border bg-light">{{student.total_books_due}}</div>
 			</div>
 			<div class="col-3">
@@ -92,27 +96,24 @@
 			    <div class="p-2 border bg-light">{{student.fine}}</div>
 			</div>
 			{% if c %}
-			<div class="col-5">
+			<div class="col-3">
 			    <div class="p-3 border bg-primary text-light fw-bold">Last Book Issued</div>
 			    <div class="p-3 border bg-light fw-bold">{{i2.borrowed_book.book.title}}</div>
+			</div>
+			<div class="col-3 bg text-center">
+			    <div class="p-3 border bg-danger text-light fw-bold">RETURN ONLY {{time_left}} hours to go !!</div>
+			    <div class="p-3 border bg-light fw-bold"><a href="{% url 'all_issued' %}"> {{i1.borrowed_book.book.title}}</a></div>
 			</div>
 			{% endif %}
 		</div>
 	</div>
-	<br>
 	<hr>
+	<p class="fs-2 text-uppercase fw-bolder text-center">Recommended Books</p>
 	<div class="container">
-		<div class="row text-center">
-		{% if c %}
-			<div class="col-5 bg text-center">
-			    <div class="p-3 border bg-danger text-light fw-bold">RETURN ONLY {{time_left}} hours to go !!</div>
-			    <div class="p-3 border bg-light fw-bold"><a href="{% url 'all_issued' %}"> {{i1.borrowed_book.book.title}}</a></div>
-			    <div class="p-3 border bg-light fw-bold"><a href="{% url 'all_issued' %}">ID: {{i1.borrowed_book.id}}</a></div>
-			</div>
-		{% endif %}
+	  <div class="row text-center">
 			<div class="col-5 bg text-center">
 			    <div class="p-3 border bg-danger text-light fw-bold">MOST POPULAR BOOK</div>
-			    <div class="p-3 border bg-light fw-bold">{{most_popular_book}}</div>
+			    <div class="p-3 border bg-light fw-bold"><a href="{% url 'book' pk=book.id%}">{{book.title}}</a></div>
 			    <div class="p-3 border bg-light fw-bold">With {{number_of_time_issued}} books issued</div>
 			</div>
 		</div>

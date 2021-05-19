@@ -40,8 +40,13 @@ class Book(models.Model):
 
     class Meta:
         ordering = ['title', 'author']
+    
     def display_genre(self):
         return ', '.join(genre.name for genre in self.genre.all())
+
+    def num_books(self):
+        return BookIndividual.objects.filter(book=self, status='a').count()
+    
     def __str__(self):
         return self.title
 
@@ -53,7 +58,7 @@ class BookIndividual(models.Model):
     status = models.CharField( max_length=1, choices=LOAN_STATUS, blank=True, default='a', help_text='')
     
     class Meta:
-        ordering = ['edition']
+        ordering = ['-edition']
 
     def __str__(self):
         return '{0} ({1})'.format(self.id, self.book.title)
@@ -73,6 +78,7 @@ class ReturnBook(models.Model):
     borrowed_book = models.OneToOneField('IssueBook', on_delete = models.CASCADE , null=True, blank=True)
     actual_return_date = models.DateTimeField(null=True,blank=True)
     is_fined = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.borrowed_book.student.name+" has returned "+self.borrowed_book.borrowed_book.book.title+" on "+str(self.actual_return_date)
 
@@ -82,13 +88,25 @@ class Student(models.Model):
     name = models.CharField(max_length=20)
     branch = models.CharField(max_length=3)
     DEPT = ( ('1', 'CSE'), ('2', 'ECE'), ('3','EEE'),('4','ME'))
-    department = models.CharField(max_length=1, choices=DEPT, blank=True, default='1', help_text='Choose your department')
+    department = models.CharField(max_length=1, choices=DEPT, blank=True, default='1')
     BAT = (('1','2017'),('2','2018'),('3','2019'),('4','2020'))
-    batch = models.CharField(max_length=1, choices=BAT, blank=True, default='4', help_text="Choose your batch")
+    batch = models.CharField(max_length=1, choices=BAT, blank=True, default='4')
     SEM = (('1','1'),('2','2'),('3','3'),('4','4'),('5','5'),('6','6'),('7','7'),('8','8'))
-    semester = models.CharField(max_length=1, choices=SEM, blank=True, default='1',help_text="Choose you semester")
+    semester = models.CharField(max_length=1, choices=SEM, blank=True, default='1')
     total_books_due=models.IntegerField(default=0)
     fine = models.IntegerField(default=0)
     email=models.EmailField()
+    
+    class Meta:
+        ordering = ['roll_no']
+
     def __str__(self):
         return str(self.roll_no)
+
+    def num_books(self):
+        return IssueBook.objects.filter(student=self, is_returned=False).count()
+"""
+class Staff(models.Model):
+    user= models.OneToOneField(User, on_delete=models.CASCADE)
+
+"""
