@@ -17,7 +17,7 @@
     </style>
   </head>
   <body>
-  	<nav class="navbar nav-pills navbar-expand-lg bg-light">
+  <nav class="navbar nav-pills navbar-expand-lg navbar-light bg-light">
 	  <div class="container-fluid">
 	    <a class="navbar-brand" href="#">Library Staff</a>
 	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@
 	            {{ user.username }}
 	          </a>
 	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-	            <li><a class="dropdown-item" href="/profile">Staff Profile</a></li>
+	            <li><a class="dropdown-item" href="#">Staff Profile</a></li>
 	          </ul>
 	        </li>
 	      </ul>
@@ -88,7 +88,9 @@
   			<tr>
   				<th>{{ s.name }}</th>
 	      		<th class="text-center">{{ s.roll_no }}</th>
-	      		<th class="text-center">{{ s.num_books }}</th>
+	      		{% if s.num_books %}<th class="text-center text-success">{{ s.num_books }}</th>
+	      		{% else %}<th class="text-center text-danger">{{ s.num_books }}</th>
+	      		{% endif %}
   				<th><form action="#" class="d-flex">
 	        	<button class="btn btn-outline-primary" type="submit">View</button>
 	      		</form></th>

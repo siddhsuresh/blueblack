@@ -93,7 +93,6 @@ class Student(models.Model):
     batch = models.CharField(max_length=1, choices=BAT, blank=True, default='4')
     SEM = (('1','1'),('2','2'),('3','3'),('4','4'),('5','5'),('6','6'),('7','7'),('8','8'))
     semester = models.CharField(max_length=1, choices=SEM, blank=True, default='1')
-    total_books_due=models.IntegerField(default=0)
     fine = models.IntegerField(default=0)
     email=models.EmailField()
     
@@ -105,8 +104,3 @@ class Student(models.Model):
 
     def num_books(self):
         return IssueBook.objects.filter(student=self, is_returned=False).count()
-"""
-class Staff(models.Model):
-    user= models.OneToOneField(User, on_delete=models.CASCADE)
-
-"""
