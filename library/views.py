@@ -55,7 +55,7 @@ def Author_view(request,pk):
 
 @login_required(redirect_field_name='dashboard')
 def Search_View(request):
-	flag=False
+	empty=flag=False
 	if request.method=='POST':
 		flag=True
 		search = request.POST.get('search')
@@ -68,7 +68,8 @@ def Search_View(request):
 			authors=Author.objects.filter(name__contains=search)		
 		if book_genre_count>0:
 			book_genre = Book.objects.filter(genre__name__iexact=search)
-
+		if book_count==author_count==book_genre_count==0:
+			empty=True
 	return render(request, "search.html", locals())
 
 @login_required(redirect_field_name='dashboard')
@@ -79,8 +80,13 @@ def get_issued_view(request):
 
 @login_required(redirect_field_name='dashboard')
 def Individual_books_view(request,pk):
+	Already_Taken=False
 	book=Book.objects.get(id=pk)
-	dataset=BookIndividual.objects.filter(book=book, status='a')
+	student=Student.objects.get(user=request.user)
+	if IssueBook.objects.filter(borrowed_book__book=book, student=student, is_returned=False).count():
+		Already_Taken=True
+	if not Already_Taken:
+		dataset=BookIndividual.objects.filter(book=book, status='a')
 	return render(request, "books.html", locals())
 
 @login_required(redirect_field_name='dashboard')
@@ -92,14 +98,14 @@ def Profile_view(request):
 def Book_Issue_View(request,pk):
 	student=Student.objects.get(user=request.user)
 	book=BookIndividual.objects.get(id=pk)
-	if book.status=='a':
+	if IssueBook.objects.filter(student=student, is_returned=False).count()>=3:
+		messages.info(request,'Sorry!! You Can Not Issue More Than 3 Books At A Time')
+	elif book.status=='a':
 		issue_date=timezone.now()
 		return_date=issue_date+timedelta(days = 1)
 		iss=IssueBook(student=student, borrowed_book=book, issue_date=issue_date, expected_return_date=return_date)
 		iss.save()
 		messages.success(request, 'Your Book Has Been Successfully Issued')
-		student.total_books_due+=1
-		student.save()
 		book.status = 'o'
 		book.save()
 	else:
@@ -125,8 +131,6 @@ def Book_Return_View(request,pk):
 		r.save()
 		messages.error(request,'You have been fined!!')
 	messages.success(request,  'Your Book Has Been Successfully Returned')
-	student.total_books_due-=1
-	student.save()
 	return redirect('/', locals())
 
 @login_required(redirect_field_name='dashboard')
