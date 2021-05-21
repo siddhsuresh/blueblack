@@ -1,4 +1,4 @@
-### Test Project using Django
+### CSE2004 DBMS GROUP A11 Project using Django
 
 ## Important Files to view:
 * **models.py** in library folder which holds all the tables [in form of python classes] with all the relations, pls check and inform if any improvements possible
