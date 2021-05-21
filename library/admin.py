@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook, PublishingHouse
+from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook, PublishingHouse, Staff
 
 admin.site.site_header = "Library Admin"
 admin.site.site_title = "Library Admin Portal"
@@ -34,3 +34,4 @@ admin.site.register(Language)
 admin.site.register(IssueBook)
 admin.site.register(ReturnBook)
 admin.site.register(Student)
+admin.site.register(Staff)

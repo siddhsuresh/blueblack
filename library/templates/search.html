@@ -17,6 +17,61 @@
     </style>
   </head>
   <body>
+    {% if user.is_staff %}
+  <nav class="navbar nav-pills navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Library Staff</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/staff">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/admin">Go to Admin</a>
+          </li>
+          <li class="nav-item dropdown active">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Books
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'staff_allbooks'%}">All Books</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/search">Search Books</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown active">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Users
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'staff_allstudents' %}">All Students</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ staff.name }}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Staff Profile</a></li>
+            </ul>
+          </li>
+        </ul>
+        {% if user.is_authenticated %}
+        <form action="{% url 'logout' %}" class="d-flex">
+          <button class="btn btn-outline-success" type="submit">Logout</button>
+        </form>
+        {% else %}
+        <form action="{% url 'login' %}" class="d-flex">
+          <button class="btn btn-outline-primary" type="submit">Login</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+  {% else %}
   <nav class="navbar nav-pills navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Library Student</a>
@@ -65,6 +120,7 @@
       </div>
     </div>
   </nav>
+  {% endif %}
   <div class="container-fluid">
   <form action="" class="row g-3" method = "POST">
     {% csrf_token %}
@@ -98,13 +154,19 @@
         {% for b in books %}
         <tr>
           <th>{{ b.title }}</th>
-          <th><a href="{% url 'author' pk=b.author.id %}"><p class=" text-primary">{{b.author.name}}</p></a></th>
+          {% if user.is_staff %}<th><a href="{% url 'staff_author' pk=b.author.id %}"><p class=" text-primary">{{b.author.name}}</p></a></th>
+          {% else %}<th><a href="{% url 'author' pk=b.author.id %}"><p class=" text-primary">{{b.author.name}}</p></a></th>
+          {% endif %}
             <th>{{ b.author.publisher.name }}</th>
             <th>{{ b.language.name }}</th>
             <th>{{b.display_genre}}</th>
-          <th><form action="{% url 'book' pk=b.id %}" class="d-flex">
+          {% if user.is_staff %}<th><form action="{% url 'staff_book' pk=b.id %}" class="d-flex">
             <button class="btn btn-outline-primary" type="submit">View</button>
             </form></th>
+          {% else %}<th><form action="{% url 'book' pk=b.id %}" class="d-flex">
+            <button class="btn btn-outline-primary" type="submit">View</button>
+            </form></th>
+          {% endif %}
         </tr>
         {% endfor %}
     </tbody>
@@ -130,9 +192,13 @@
           <th>{{ a.publisher }}</th>
           <th>{{ a.get_gender_display }}</th>
           <th>{{ a.nationality }}</th>
-          <th><form action="{% url 'author' pk=a.id %}" class="d-flex">
+          {% if user.is_staff %}<th><form action="{% url 'staff_author' pk=a.id %}" class="d-flex">
             <button class="btn btn-outline-primary" type="submit">View</button>
             </form></th>
+          {% else %}<th><form action="{% url 'staff_author' pk=a.id %}" class="d-flex">
+            <button class="btn btn-outline-primary" type="submit">View</button>
+            </form></th>
+          {% endif %}
         </tr>
         {% endfor %}
     </tbody>
@@ -155,13 +221,19 @@
         {% for b in book_genre %}
         <tr>
           <th>{{ b.title }}</th>
-          <th><a href="{% url 'author' pk=b.author.id %}"><p class="text-primary">{{b.author.name}}</p></a></th>
+          {% if user.is_staff %}<th><a href="{% url 'staff_author' pk=b.author.id %}"><p class="text-primary">{{b.author.name}}</p></a></th>
+          {% else %} <th><a href="{% url 'author' pk=b.author.id %}"><p class="text-primary">{{b.author.name}}</p></a></th>
+          {% endif %}
             <th>{{ b.author.publisher.name }}</th>
             <th>{{ b.language.name }}</th>
             <th>{{b.display_genre}}</th>
-          <th><form action="{% url 'book' pk=b.id %}" class="d-flex">
+          {% if user.is_staff %}<th><form action="{% url 'staff_book' pk=b.id %}" class="d-flex">
             <button class="btn btn-outline-primary" type="submit">View</button>
             </form></th>
+          {% else %}<th><form action="{% url 'staff_book' pk=b.id %}" class="d-flex">
+            <button class="btn btn-outline-primary" type="submit">View</button>
+            </form></th>
+          {% endif %}
         </tr>
         {% endfor %}
     </tbody>

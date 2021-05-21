@@ -25,7 +25,7 @@
 			</div>
 		   {% endfor %}
 	{% endif %}
-  	<nav class="navbar nav-pills navbar-expand-lg navbar-light bg-light">
+<nav class="navbar nav-pills navbar-expand-lg navbar-light bg-light">
 	  <div class="container-fluid">
 	    <a class="navbar-brand" href="#">Library Staff</a>
 	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,9 +37,6 @@
 	          <a class="nav-link" aria-current="page" href="/staff">Dashboard</a>
 	        </li>
 	        <li class="nav-item">
-	          <a class="nav-link" aria-current="page" href="/">Back to Student</a>
-	        </li>
-	        <li class="nav-item">
 	          <a class="nav-link" aria-current="page" href="/admin">Go to Admin</a>
 	        </li>
 	        <li class="nav-item dropdown active">
@@ -47,10 +44,19 @@
 	            Books
 	          </a>
 	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-	            <li><a class="dropdown-item" href="#">All Books</a></li>
+	            <li><a class="dropdown-item" href="{% url 'staff_allbooks'%}">All Books</a></li>
 	            <li><hr class="dropdown-divider"></li>
-	            <li><a class="dropdown-item" href="#">Search Books</a></li>
-	            <li><a class="dropdown-item" href="#">Modify Books</a></li>
+	            <li><a class="dropdown-item" href="/search">Search Books</a></li>
+	          </ul>
+	        </li>
+	        <li class="nav-item dropdown active">
+	          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	            Authors
+	          </a>
+	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+	            <li><a class="dropdown-item" href="{% url 'staff_allauthors'%}">All Authors</a></li>
+	            <li><hr class="dropdown-divider"></li>
+	            <li><a class="dropdown-item" href="#">Add Author</a></li>
 	          </ul>
 	        </li>
 	        <li class="nav-item dropdown active">
@@ -58,12 +64,12 @@
 	            Users
 	          </a>
 	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-	            <li><a class="dropdown-item" href="allstudents">All Students</a></li>
+	            <li><a class="dropdown-item" href="{% url 'staff_allstudents' %}">All Students</a></li>
 	          </ul>
 	        </li>
 	        <li class="nav-item dropdown">
 	          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-	            {{ user.username }}
+	            {{ staff.name }}
 	          </a>
 	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 	            <li><a class="dropdown-item" href="#">Staff Profile</a></li>
