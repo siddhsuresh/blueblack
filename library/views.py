@@ -1,6 +1,6 @@
 from .forms import NewBookForm, NewStudentForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook
+from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook, Staff, PublishingHouse
 from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
@@ -13,7 +13,10 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 
 def View_Dashboard(request):
+	if request.user.is_staff:
+		return redirect('/staff')
 	if request.user.is_authenticated:
+		flag1=flag2=flag3=False
 		student=Student.objects.get(user=request.user)
 		c_i=IssueBook.objects.all().count()
 		if c_i:
@@ -29,7 +32,16 @@ def View_Dashboard(request):
 			time1 = i1.expected_return_date
 			time=timezone.now()
 			time1-=time
-			time_left = time1.total_seconds()//3600
+			if time1.total_seconds()<0:
+				flag3=True
+			else:
+				time_left = time1.total_seconds()//3600
+				if time_left==0:
+					flag1=True
+					time_left = time1.total_seconds()//60
+				if time_left==0:
+					flag2=True
+					time_left = time1.total_seconds()
 	return render(request, "Dashboard.html", locals())
 
 @login_required(redirect_field_name='dashboard')
@@ -44,18 +56,24 @@ def add_book_view(request):
 	return render(request, "addbook.html", context)
 
 def all_books_view(request):
-    books=Book.objects.all()
-    return render(request, "allbooks.html", locals())
+	if request.user.is_staff:
+		return redirect('/staff')
+	books=Book.objects.all()
+	return render(request, "allbooks.html", locals())
 
 @login_required(redirect_field_name='dashboard')
 def Author_view(request,pk):
-    author=Author.objects.get(id=pk)
-    books=Book.objects.filter(author=author)
-    return render(request, "author.html", locals())
+	if request.user.is_staff:
+		return redirect('/staff')
+	author=Author.objects.get(id=pk)
+	books=Book.objects.filter(author=author)
+	return render(request, "author.html", locals())
 
 @login_required(redirect_field_name='dashboard')
 def Search_View(request):
 	empty=flag=False
+	if request.user.is_staff:
+		staff=Staff.objects.get(user=request.user)
 	if request.method=='POST':
 		flag=True
 		search = request.POST.get('search')
@@ -74,12 +92,16 @@ def Search_View(request):
 
 @login_required(redirect_field_name='dashboard')
 def get_issued_view(request):
+	if request.user.is_staff:
+		return redirect('/staff')
 	student=Student.objects.get(user=request.user)
 	book_list=IssueBook.objects.filter(student=student, is_returned=False)
 	return render(request, 'viewissued.html', locals())
 
 @login_required(redirect_field_name='dashboard')
 def Individual_books_view(request,pk):
+	if request.user.is_staff:
+		return redirect('/staff')
 	Already_Taken=False
 	book=Book.objects.get(id=pk)
 	student=Student.objects.get(user=request.user)
@@ -91,11 +113,15 @@ def Individual_books_view(request,pk):
 
 @login_required(redirect_field_name='dashboard')
 def Profile_view(request):
+	if request.user.is_staff:
+		return redirect('/staff')
 	student=Student.objects.get(user=request.user)
 	return render(request, "profile.html", locals())
 
 @login_required(redirect_field_name='dashboard')
 def Book_Issue_View(request,pk):
+	if request.user.is_staff:
+		return redirect('/staff')
 	student=Student.objects.get(user=request.user)
 	book=BookIndividual.objects.get(id=pk)
 	if IssueBook.objects.filter(student=student, is_returned=False).count()>=3:
@@ -114,6 +140,8 @@ def Book_Issue_View(request,pk):
 
 @login_required(redirect_field_name='dashboard')
 def Book_Return_View(request,pk):
+	if request.user.is_staff:
+		return redirect('/staff')
 	student=Student.objects.get(user=request.user)
 	iss=IssueBook.objects.get(id=pk)
 	iss.is_returned=True
@@ -173,11 +201,14 @@ def registerPage(request):
 	context = {'form': form, 'student_form': student_form}
 	return render(request, 'registeruser.html', context)
 """
+
+#All Staff Website Views written here
 @login_required(redirect_field_name='dashboard')
 def View_Staff_Dashboard(request):
 	if not request.user.is_staff:
 		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
 		return redirect('/', locals())
+	staff=Staff.objects.get(user=request.user)
 	labels = []
 	data = []
 	result = IssueBook.objects.values('borrowed_book__book__title').annotate(count=Count('borrowed_book'))
@@ -189,5 +220,59 @@ def View_Staff_Dashboard(request):
 
 @login_required(redirect_field_name='dashboard')
 def View_Staff_AllStudents(request):
+	if not request.user.is_staff:
+		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
+		return redirect('/', locals())
+	staff=Staff.objects.get(user=request.user)
 	students=Student.objects.all()
 	return render(request,'staff_allusers.html',locals())
+
+@login_required(redirect_field_name='dashboard')
+def View_Student(request,pk):
+	if not request.user.is_staff:
+		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
+		return redirect('/', locals())
+	staff=Staff.objects.get(user=request.user)
+	student=Student.objects.get(id=pk)
+	book_list=IssueBook.objects.filter(student=student, is_returned=False)
+	return render(request, 'staff_student.html', locals())
+
+@login_required(redirect_field_name='dashboard')
+def View_Staff_AllBooks(request):
+	if not request.user.is_staff:
+		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
+		return redirect('/', locals())
+	staff=Staff.objects.get(user=request.user)
+	books=Book.objects.all()
+	num_books=Book.objects.all().count()
+	num_book_individuals=BookIndividual.objects.all().count()
+	return render(request, "staff_allbooks.html", locals())
+
+@login_required(redirect_field_name='dashboard')
+def View_Staff_Author(request,pk):
+	if not request.user.is_staff:
+		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
+		return redirect('/', locals())
+	staff=Staff.objects.get(user=request.user)
+	author=Author.objects.get(id=pk)
+	books=Book.objects.filter(author=author)
+	return render(request, "staff_author.html",locals())
+
+@login_required(redirect_field_name='dashboard')
+def View_Staff_Book(request,pk):
+	if not request.user.is_staff:
+		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
+		return redirect('/', locals())
+	staff=Staff.objects.get(user=request.user)
+	book=Book.objects.get(id=pk)
+	dataset=BookIndividual.objects.filter(book=book)
+	return render(request, "staff_books.html",locals())
+
+@login_required(redirect_field_name='dashboard')
+def View_Staff_AllAuthors(request):
+	if not request.user.is_staff:
+		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
+		return redirect('/', locals())
+	staff=Staff.objects.get(user=request.user)
+	authors=Author.objects.all()
+	return render(request, "staff_allauthors.html", locals())

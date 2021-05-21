@@ -84,7 +84,7 @@
   			<tr>
   				<th> {{ data.id }} </th>
   				<th> {{ data.edition }} </th>
-  				<th> {{ data.get_status_display }} </th>
+  				<th class="text-success"> {{ data.get_status_display }} </th>
   				<th><form action="{% url 'book_issue' pk=data.id %}" class="d-flex">
 	        	<button class="btn btn-outline-primary" type="submit">Issue</button>
 	      		</form></th>

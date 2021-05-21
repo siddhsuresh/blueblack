@@ -40,11 +40,6 @@
 	        <li class="nav-item">
 	          <a class="nav-link" aria-current="page" href="/">Dashboard</a>
 	        </li>
-	        {% if user.is_staff %}
-	        <li class="nav-item">
-	          <a class="nav-link" aria-current="page" href="/staff">Staff</a>
-	        </li>
-	         {% endif %}
 	        <li class="nav-item dropdown active">
 	          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 	            Books
@@ -101,7 +96,16 @@
 			    <div class="p-3 border bg-light fw-bold">{{i2.borrowed_book.book.title}}</div>
 			</div>
 			<div class="col-3 bg text-center">
-			    <div class="p-3 border bg-danger text-light fw-bold">RETURN ONLY {{time_left}} hours to go !!</div>
+			{% if flag3 %}    
+			<div class="p-3 border bg-danger text-light fw-bold">You Have Passed the Deadline for the Books!!</div>
+			{% else %}
+				<div class="p-3 border bg-danger text-light fw-bold">RETURN ONLY {{time_left}} 
+			    {% if flag1 %} minutes
+			    {% elif flag2 %} seconds
+			    {% else %} hours
+			    {% endif %}
+				to go !!</div>
+			{% endif %}
 			    <div class="p-3 border bg-light fw-bold"><a href="{% url 'all_issued' %}"> {{i1.borrowed_book.book.title}}</a></div>
 			</div>
 			{% endif %}

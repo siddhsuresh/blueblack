@@ -46,6 +46,9 @@ class Book(models.Model):
 
     def num_books(self):
         return BookIndividual.objects.filter(book=self, status='a').count()
+
+    def issued_books(self):
+        return BookIndividual.objects.filter(book=self, status='o').count()
     
     def __str__(self):
         return self.title
@@ -63,6 +66,10 @@ class BookIndividual(models.Model):
     def __str__(self):
         return '{0} ({1})'.format(self.id, self.book.title)
 
+    def availability(self):
+        if self.status=='a':
+            return True
+        return False
 
 class IssueBook(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE)
@@ -104,3 +111,11 @@ class Student(models.Model):
 
     def num_books(self):
         return IssueBook.objects.filter(student=self, is_returned=False).count()
+
+class Staff(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    roll_no = models.CharField(max_length=10)
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return str(self.roll_no)
