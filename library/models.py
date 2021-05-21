@@ -40,7 +40,7 @@ class Book(models.Model):
 
     class Meta:
         ordering = ['title', 'author']
-    
+
     def display_genre(self):
         return ', '.join(genre.name for genre in self.genre.all())
 
@@ -49,7 +49,7 @@ class Book(models.Model):
 
     def issued_books(self):
         return BookIndividual.objects.filter(book=self, status='o').count()
-    
+
     def __str__(self):
         return self.title
 
@@ -59,7 +59,7 @@ class BookIndividual(models.Model):
     edition = models.IntegerField(default=0)
     LOAN_STATUS = ( ('o', 'Not Available'), ('a', 'Available'))
     status = models.CharField( max_length=1, choices=LOAN_STATUS, blank=True, default='a', help_text='')
-    
+
     class Meta:
         ordering = ['-edition']
 
@@ -77,7 +77,7 @@ class IssueBook(models.Model):
     issue_date = models.DateTimeField(null=True,blank=True)
     expected_return_date = models.DateTimeField(null=True,blank=True)
     is_returned = models.BooleanField(default=False)
-    
+
     def __str__(self):
         return self.student.name+" has been issued "+self.borrowed_book.book.title+" on "+str(self.issue_date)
 
@@ -85,7 +85,7 @@ class ReturnBook(models.Model):
     borrowed_book = models.OneToOneField('IssueBook', on_delete = models.CASCADE , null=True, blank=True)
     actual_return_date = models.DateTimeField(null=True,blank=True)
     is_fined = models.BooleanField(default=False)
-    
+
     def __str__(self):
         return self.borrowed_book.student.name+" has returned "+self.borrowed_book.borrowed_book.book.title+" on "+str(self.actual_return_date)
 
@@ -102,7 +102,7 @@ class Student(models.Model):
     semester = models.CharField(max_length=1, choices=SEM, blank=True, default='1')
     fine = models.IntegerField(default=0)
     email=models.EmailField()
-    
+
     class Meta:
         ordering = ['roll_no']
 
@@ -119,3 +119,12 @@ class Staff(models.Model):
 
     def __str__(self):
         return str(self.roll_no)
+
+class RenewRequest(models.Model):
+    staff = models.ManyToManyField(Staff)
+    book = models.ForeignKey('IssueBook',  on_delete = models.SET_NULL , null=True, blank=True)
+    number_of_days = models.IntegerField(default=1)
+    reason = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.book.student.name +" has requested "+str(self.number_of_days)+" day extension for the book "+self.book.borrowed_book.book.title

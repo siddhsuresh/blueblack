@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook, PublishingHouse, Staff
+from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook, PublishingHouse, Staff, RenewRequest
 
 admin.site.site_header = "Library Admin"
 admin.site.site_title = "Library Admin Portal"
@@ -19,14 +19,14 @@ class IssueBookInline(admin.TabularInline):
 @admin.register(BookIndividual)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('id', 'book', 'edition')
-    inlines = [IssueBookInline]    
+    inlines = [IssueBookInline]
 
 class BookInline(admin.TabularInline):
 	model = Author
 
 @admin.register(PublishingHouse)
 class BookAdmin(admin.ModelAdmin):
-	inlines = [BookInline] 
+	inlines = [BookInline]
 
 admin.site.register(Author)
 admin.site.register(Genre)
@@ -35,3 +35,4 @@ admin.site.register(IssueBook)
 admin.site.register(ReturnBook)
 admin.site.register(Student)
 admin.site.register(Staff)
+admin.site.register(RenewRequest)

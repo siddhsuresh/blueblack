@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'library',
+    'django_extensions',
     'debug_toolbar'
 ]
 
@@ -83,8 +84,17 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'blueblack$default',
+        'USER': 'blueblack',
+        'PASSWORD': 'blueapple',
+        'HOST': 'blueblack.mysql.pythonanywhere-services.com',
+    }
+}
+"""
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -145,3 +155,5 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
                 message_constants.ERROR: 'danger',}
 
 INTERNAL_IPS = [ 'blueblack.pythonanywhere.com','127.0.0.1']
+
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
