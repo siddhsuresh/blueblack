@@ -125,6 +125,8 @@ class RenewRequest(models.Model):
     book = models.ForeignKey('IssueBook',  on_delete = models.SET_NULL , null=True, blank=True)
     number_of_days = models.IntegerField(default=1)
     reason = models.CharField(max_length=100)
+    REQUEST_STATUS = ( ('p', 'Pending'), ('a', 'Approved'),('d','Denied'))
+    request = models.CharField(max_length=1, choices=REQUEST_STATUS, blank=True, default='p')
 
     def __str__(self):
         return self.book.student.name +" has requested "+str(self.number_of_days)+" day extension for the book "+self.book.borrowed_book.book.title
