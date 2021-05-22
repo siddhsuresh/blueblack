@@ -11,6 +11,8 @@ from django.utils import timezone
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+import csv
+
 
 def View_Dashboard(request):
 	if request.user.is_staff:
@@ -83,7 +85,7 @@ def Search_View(request):
 		if book_count>0:
 			books=Book.objects.filter(title__contains=search)
 		if author_count>0:
-			authors=Author.objects.filter(name__contains=search)		
+			authors=Author.objects.filter(name__contains=search)
 		if book_genre_count>0:
 			book_genre = Book.objects.filter(genre__name__iexact=search)
 		if book_count==author_count==book_genre_count==0:
@@ -160,9 +162,9 @@ def Book_Return_View(request,pk):
 		messages.error(request,'You have been fined!!')
 	messages.success(request,  'Your Book Has Been Successfully Returned')
 	return redirect('/', locals())
-
+"""
 @login_required(redirect_field_name='dashboard')
-def student_render_pdf_view(request):
+def History_view(request):
     template_path = 'history.html'
     student=Student.objects.get(user=request.user)
     ret= ReturnBook.objects.filter(borrowed_book__student=student)
@@ -180,6 +182,17 @@ def student_render_pdf_view(request):
     # if error then show some funy view
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+"""
+@login_required(redirect_field_name='dashboard')
+def History_view(request):
+    student=Student.objects.get(user=request.user)
+    response=HttpResponse(content_type='text/csv')
+    writer = csv.writer(response)
+    writer.writerow(['Book','Author','Language','Issue Date','Expected Return Date','Actual Return Date'])
+    for r in ReturnBook.objects.filter(borrowed_book__student=student, borrowed_book__is_returned=True).values_list('borrowed_book__borrowed_book__book__title','borrowed_book__borrowed_book__book__author__name','borrowed_book__borrowed_book__book__language__name','borrowed_book__issue_date','borrowed_book__expected_return_date','actual_return_date'):
+        writer.writerow(r)
+    response['Content-Disposition'] = 'attachment; filename="Return History.csv"'
     return response
 """
 def registerPage(request):
