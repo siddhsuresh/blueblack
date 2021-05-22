@@ -81,6 +81,12 @@ class IssueBook(models.Model):
     def __str__(self):
         return self.student.name+" has been issued "+self.borrowed_book.book.title+" on "+str(self.issue_date)
 
+    def request_for_renew(self):
+        if self.renewrequest.all().count()>0:
+            if self.renewrequest.request=='p':
+                return True
+        return False
+
 class ReturnBook(models.Model):
     borrowed_book = models.OneToOneField('IssueBook', on_delete = models.CASCADE , null=True, blank=True)
     actual_return_date = models.DateTimeField(null=True,blank=True)
@@ -122,11 +128,11 @@ class Staff(models.Model):
 
 class RenewRequest(models.Model):
     staff = models.ManyToManyField(Staff)
-    book = models.ForeignKey('IssueBook',  on_delete = models.SET_NULL , null=True, blank=True)
-    number_of_days = models.IntegerField(default=1)
-    reason = models.CharField(max_length=100)
-    REQUEST_STATUS = ( ('p', 'Pending'), ('a', 'Approved'),('d','Denied'))
+    book = models.OneToOneField('IssueBook',  on_delete = models.CASCADE , null=True, blank=True)
+    #number_of_days = models.IntegerField(default=1, null=True, blank=True)
+    #reason = models.CharField(max_length=100, null=True, blank=True)
+    REQUEST_STATUS = (('p', 'Pending'), ('a', 'Approved'),('d','Denied'))
     request = models.CharField(max_length=1, choices=REQUEST_STATUS, blank=True, default='p')
 
     def __str__(self):
-        return self.book.student.name +" has requested "+str(self.number_of_days)+" day extension for the book "+self.book.borrowed_book.book.title
+        return self.book.student.name +" has requested 1 day extension for the book "+self.book.borrowed_book.book.title

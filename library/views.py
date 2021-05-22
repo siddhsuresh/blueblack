@@ -1,6 +1,6 @@
 from .forms import NewBookForm, NewStudentForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook, Staff, PublishingHouse
+from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook, Staff, PublishingHouse, RenewRequest
 from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
@@ -99,6 +99,19 @@ def get_issued_view(request):
 	student=Student.objects.get(user=request.user)
 	book_list=IssueBook.objects.filter(student=student, is_returned=False)
 	return render(request, 'viewissued.html', locals())
+
+@login_required(redirect_field_name='dashboard')
+def View_Renew_Issued(request,pk):
+	if request.user.is_staff:
+		return redirect('/staff')
+	iss=IssueBook.objects.get(id=pk)
+	r=RenewRequest(book=iss, request='p')
+	r.save()
+	for s in Staff.objects.all():
+		r.staff.add(s)
+	r.save()
+	messages.info(request,'Renew Request is Sent!!')
+	return redirect('/',locals())
 
 @login_required(redirect_field_name='dashboard')
 def Individual_books_view(request,pk):

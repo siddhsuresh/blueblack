@@ -29,6 +29,7 @@ urlpatterns = [
     path('profile/', Profile_view),
     path('<int:pk>/author', Author_view,  name='author'),
     path('viewissued/', get_issued_view, name='all_issued'),
+    path('<int:pk>/renew/', View_Renew_Issued, name='book_renew'),
     path('<int:pk>/return/', Book_Return_View, name='book_return'),
     path('<int:pk>/book/', Individual_books_view, name='book'),
     path('<uuid:pk>/issue/', Book_Issue_View, name='book_issue'),

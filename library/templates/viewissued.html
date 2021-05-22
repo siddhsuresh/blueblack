@@ -70,16 +70,26 @@
       			<th scope="col">Edition</th>
       			<th scope="col">Issued Date</th>
       			<th scope="col">Expected Return Date</th>
+      			<th scope="col">Request For Book Renewal</th>
+      			<th scope="col">Actions</th>
     		</tr>
   		</thead>
   		<tbody>
   			{% for b in book_list %}
   			<tr>
-  				<th scope="col"> {{ b.borrowed_book.book.title }}</th>
+  				<th scope="col">{{ b.borrowed_book.book.title }}</th>
   				<th scope="col">{{ b.borrowed_book.id }} </th>
   				<th scope="col">{{b.borrowed_book.edition}} </th>
   				<th scope="col">{{b.issue_date}} </th>
   				<th scope="col">{{b.expected_return_date}}</th>
+  			{% if not b.request_for_renew %}	
+  			<th scope="col" class="text-primary"><a href="{% url 'book_renew' pk=b.id %}">Renew Book</a></th>
+  			{% else %}
+  				<th scope="col" class="text-primary fw-bold">Request Pending</th>
+  				<th scope="col" class="text-warning fw-bold">Sorry Only 1 Renew At A Time!!</th>
+  				<th scope="col" class="text-warning fw-bold">Sorry Only 1 Renew Allowed!!</th>
+  				<th scope="col" class="text-danger fw-bolder">Request Denied</th>
+  			{% endif %}
   				<th><form action="{% url 'book_return' pk=b.id %}" class="d-flex">
 	        	<button class="btn btn-outline-primary" type="submit">Return</button>
 	      		</form></th>
