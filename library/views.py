@@ -206,7 +206,7 @@ def History_view(request):
     l.append(timezone.now())
     writer.writerow(l)
     writer.writerow(['Book','Author','Publisher','Language','Issue Date','Expected Return Date','Actual Return Date'])
-    for r in ReturnBook.objects.filter(borrowed_book__student=student, borrowed_book__is_returned=True).values_list('borrowed_book__borrowed_book__book__title','borrowed_book__borrowed_book__book__author__name','borrowed_book__borrowed_book__book__PublishingHouse__name','borrowed_book__borrowed_book__book__language__name','borrowed_book__issue_date','borrowed_book__expected_return_date','actual_return_date'):
+    for r in ReturnBook.objects.filter(borrowed_book__student=student, borrowed_book__is_returned=True).values_list('borrowed_book__borrowed_book__book__title','borrowed_book__borrowed_book__book__author__name','borrowed_book__borrowed_book__book__author__publisher__name','borrowed_book__borrowed_book__book__language__name','borrowed_book__issue_date','borrowed_book__expected_return_date','actual_return_date'):
         writer.writerow(r)
     response['Content-Disposition'] = 'attachment; filename="Return History.csv"'
     return response
