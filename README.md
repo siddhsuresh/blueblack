@@ -8,7 +8,7 @@
 * **admin.py** holds the code to register the models to the admin page which is used to view and change the data in the database.
 * **models.sql** holds the sql commands used by django to create the database in sqlite3 [just to see]
 
-### To view without downloading go to https://blueblack.pythonanywhere.com
+### To view https://blueblack.pythonanywhere.com
 
 ## To Test It out
 * Donwload the Code
