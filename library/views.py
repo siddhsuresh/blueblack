@@ -107,9 +107,6 @@ def View_Renew_Issued(request,pk):
 	iss=IssueBook.objects.get(id=pk)
 	r=RenewRequest(book=iss, request='p')
 	r.save()
-	for s in Staff.objects.all():
-		r.staff.add(s)
-	r.save()
 	messages.info(request,'Renew Request is Sent!!')
 	return redirect('/',locals())
 

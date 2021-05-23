@@ -82,13 +82,16 @@
   				<th scope="col">{{b.borrowed_book.edition}} </th>
   				<th scope="col">{{b.issue_date}} </th>
   				<th scope="col">{{b.expected_return_date}}</th>
-  			{% if not b.request_for_renew %}	
-  			<th scope="col" class="text-primary"><a href="{% url 'book_renew' pk=b.id %}">Renew Book</a></th>
-  			{% else %}
-  				<th scope="col" class="text-primary fw-bold">Request Pending</th>
-  				<th scope="col" class="text-warning fw-bold">Sorry Only 1 Renew At A Time!!</th>
-  				<th scope="col" class="text-warning fw-bold">Sorry Only 1 Renew Allowed!!</th>
-  				<th scope="col" class="text-danger fw-bolder">Request Denied</th>
+  			{% if b.request_for_renew %}
+  				<th scope="col" class="text-primary fw-bold text-center">Request Pending</th>
+  			{% elif b.request_success %}
+  				<th scope="col" class="text-success fw-bold text-center">Only 1 Renew Allowed!!</th>
+  			{% elif b.request_denied %}
+  				<th scope="col" class="text-danger fw-bolder text-center">Request Denied</th>
+  			{% elif not b.can_renew %}
+  				<th scope="col" class="text-warning fw-bold text-center">Only 1 Renew At A Time!!</th>
+  			{% else %}	
+  			<th scope="col"><a href="{% url 'book_renew' pk=b.id %}" class="text-secondary fw-bold text-center">Renew Book</a></th>
   			{% endif %}
   				<th><form action="{% url 'book_return' pk=b.id %}" class="d-flex">
 	        	<button class="btn btn-outline-primary" type="submit">Return</button>
