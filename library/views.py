@@ -29,7 +29,7 @@ def View_Dashboard(request):
 			book = Book.objects.get(title=name)
 		c=IssueBook.objects.filter(student=student, is_returned=False).count()
 		if c:
-			i1=IssueBook.objects.filter(student=student, is_returned=False).first()
+			i1=IssueBook.objects.filter(student=student, is_returned=False).order_by('expected_return_date').first()
 			i2=IssueBook.objects.filter(student=student).last()
 			time1 = i1.expected_return_date
 			time=timezone.now()
@@ -199,8 +199,8 @@ def History_view(request):
     student=Student.objects.get(user=request.user)
     response=HttpResponse(content_type='text/csv')
     writer = csv.writer(response)
-    writer.writerow('Book History:')
     l=[]
+    l.append('Book History:')
     l.append(student.name)
     l.append(student.roll_no)
     l.append(timezone.now())
@@ -305,3 +305,33 @@ def View_Staff_AllAuthors(request):
 	staff=Staff.objects.get(user=request.user)
 	authors=Author.objects.all()
 	return render(request, "staff_allauthors.html", locals())
+
+@login_required(redirect_field_name='dashboard')
+def View_Staff_Renew(request):
+	if not request.user.is_staff:
+		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
+	flag=False
+	if RenewRequest.objects.all().count():
+		flag=True
+		renew = RenewRequest.objects.filter(request='p')
+	return render(request, "staff_renewbooks.html",locals())
+
+@login_required(redirect_field_name='dashboard')
+def View_Staff_Approve_Renew(request,pk):
+	if not request.user.is_staff:
+		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
+	r = RenewRequest.objects.get(id=pk)
+	r.request = 'a'
+	r.save()
+	r.book.expected_return_date+=timedelta(days=1)
+	r.book.save()
+	return redirect('/staff', locals())
+
+@login_required(redirect_field_name='dashboard')
+def View_Staff_Deny_Renew(request,pk):
+	if not request.user.is_staff:
+		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
+	r = RenewRequest.objects.get(id=pk)
+	r.request = 'd'
+	r.save()
+	return redirect('/staff', locals())

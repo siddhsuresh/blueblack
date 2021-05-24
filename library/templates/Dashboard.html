@@ -78,8 +78,17 @@
 	  </div>
 	</nav>
 	{% if user.is_authenticated %}
-	<p class="fs-2 text-uppercase fw-bolder text-center">Student Information</p>
 	<br>
+	<!--
+	<p class="fs-2 text-uppercase fw-bolder text-center">Recommended Books</p>
+	<div class="card" style="width: 18rem;">
+  		<div class="card-body">
+	    	<h5 class="card-title">MOST POPULAR BOOK</h5>
+	    	<p class="card-text">{{book.title}} has been issued {{number_of_time_issued}} times!!</p>
+	    	<a href="{% url 'book' pk=book.id%}" class="btn btn-primary stretched-link">Check It Out!!</a>
+	  </div>
+	</div>-->
+	<p class="fs-2 text-uppercase fw-bolder text-center">Student Information</p>
 	<div class="container float-right">
 	  <div class="row text-center">
 			<div class="col-3">

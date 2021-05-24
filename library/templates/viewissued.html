@@ -91,7 +91,7 @@
   			{% elif not b.can_renew %}
   				<th scope="col" class="text-warning fw-bold text-center">Only 1 Renew At A Time!!</th>
   			{% else %}	
-  			<th scope="col"><a href="{% url 'book_renew' pk=b.id %}" class="text-secondary fw-bold text-center">Renew Book</a></th>
+  			<th scope="col" class="fw-bold text-center"><a href="{% url 'book_renew' pk=b.id %}" class="text-secondary">Renew Book</a></th>
   			{% endif %}
   				<th><form action="{% url 'book_return' pk=b.id %}" class="d-flex">
 	        	<button class="btn btn-outline-primary" type="submit">Return</button>
