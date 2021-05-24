@@ -8,21 +8,13 @@
 * **admin.py** holds the code to register the models to the admin page which is used to view and change the data in the database.
 * **models.sql** holds the sql commands used by django to create the database in sqlite3 [just to see]
 
-## Capabilites till now
-* Login Logout System and username in navbar
-* Can view all book from the website
-* Can issue and return books
-* Can view all issued books
-* Can view all returned book in pdf form
-* Can show book copy w.r.t respective book and book w.r.t author
-* To view without downloading go to https://blueblack.pythonanywhere.com
+### To view https://blueblack.pythonanywhere.com
 
 ## To Test It out
 * Donwload the Code
 * Put the location of pip which comes with python in your computer variables path. Check youtube
 * In command prompt write
   * **pip install -r requirements.txt**
-  * **If the above is not working just use pip install django and pip install xhtml2pdf**
 * Then go to the location where you have saved the code and in that location in command prompt use 
   * **python manage.py makemigrations**
   * **python manage.py migrate**
