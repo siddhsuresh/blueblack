@@ -322,6 +322,7 @@ def View_Staff_Approve_Renew(request,pk):
 		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
 	r = RenewRequest.objects.get(id=pk)
 	r.request = 'a'
+	r.staff = Staff.objects.get(user=request.user)
 	r.save()
 	r.book.expected_return_date+=timedelta(days=1)
 	r.book.save()
@@ -332,6 +333,7 @@ def View_Staff_Deny_Renew(request,pk):
 	if not request.user.is_staff:
 		messages.error(request,'You are Unauthorised to visit the Staff Page!!')
 	r = RenewRequest.objects.get(id=pk)
+	r.staff = Staff.objects.get(user=request.user)
 	r.request = 'd'
 	r.save()
 	return redirect('/staff', locals())
