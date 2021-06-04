@@ -1,0 +1,36 @@
+	<table class="table table-hover">
+  		<thead>
+    		<tr>
+      			<th scope="col">Book</th>
+      			<th scope="col" class="text-center">Author</th>
+      			<th scope="col" class="text-center">Publisher</th>
+      			<th scope="col" class="text-center">Language</th>
+      			<th scope="col" class="text-center">Genre</th>
+      			<th scope="col" class="text-center">Number of Books Availabe</th>
+      			<th scope="col">Actions</th>
+    		</tr>
+  		</thead>
+  		<tbody>
+  	{% if books %}
+	  	{% for b in books  %}
+	  		<tr>
+	  			<th>{{ b.title }}</th>
+	  			<th><a href="{% url 'author' pk=b.author.id %}"><p class="text-center text-primary">{{b.author.name}}</p></a></th>
+		      	<th class="text-center">{{ b.author.publisher.name }}</th>
+		      	<th class="text-center">{{ b.language.name }}</th>
+		      	<th class="text-center">{{ b.display_genre }}</th>
+		      	{% if b.num_books %}
+		      	<th class="text-success text-center">{{ b.num_books }}</th>
+		      	{% else %}
+		      	<th class="text-danger text-center">{{ b.num_books }}</th>
+		      	{% endif %}
+	  			<th><form action="{% url 'book' pk=b.id %}" class="d-flex">
+		        <button class="btn btn-outline-primary" type="submit">View</button>
+		      	</form></th>
+	  		</tr>
+	     {% endfor %}
+	{% else %}
+		<p class="fs-5 text-danger text-center fw-bold">No Books Found....</p>
+	{% endif %}
+</tbody>
+</table>

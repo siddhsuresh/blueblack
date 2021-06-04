@@ -19,7 +19,6 @@ from django.urls import path, include
 from library.views import *
 from django.conf.urls import url
 from django.contrib.auth.views import LoginView, LogoutView
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('history/', History_view, name='history'),

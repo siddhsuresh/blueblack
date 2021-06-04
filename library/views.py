@@ -4,6 +4,7 @@ from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, St
 from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.views.generic import ListView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
@@ -11,8 +12,9 @@ from django.utils import timezone
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 import csv
-
 
 def View_Dashboard(request):
 	if request.user.is_staff:
@@ -60,8 +62,21 @@ def add_book_view(request):
 def all_books_view(request):
 	if request.user.is_staff:
 		return redirect('/staff')
-	books=Book.objects.all()
-	return render(request, "allbooks.html", locals())
+	ctx={}
+	url_parameter = request.GET.get("q")
+	if url_parameter:
+		books = Book.objects.filter(title__icontains=url_parameter)
+	else:
+		books = Book.objects.all()
+	if request.is_ajax():
+		html = render_to_string(
+			template_name="books-results-partial.html", 
+			context={"books": books}
+		)
+		data_dict = {"html_from_view": html}
+		return JsonResponse(data=data_dict, safe=False)
+	ctx["books"] = books
+	return render(request, "allbooks.html", context=ctx)
 
 @login_required(redirect_field_name='dashboard')
 def Author_view(request,pk):
