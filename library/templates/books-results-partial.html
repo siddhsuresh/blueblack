@@ -1,36 +1,41 @@
-	<table class="table table-hover">
-  		<thead>
-    		<tr>
-      			<th scope="col">Book</th>
-      			<th scope="col" class="text-center">Author</th>
-      			<th scope="col" class="text-center">Publisher</th>
-      			<th scope="col" class="text-center">Language</th>
-      			<th scope="col" class="text-center">Genre</th>
-      			<th scope="col" class="text-center">Number of Books Availabe</th>
-      			<th scope="col">Actions</th>
-    		</tr>
-  		</thead>
-  		<tbody>
-  	{% if books %}
-	  	{% for b in books  %}
-	  		<tr>
-	  			<th>{{ b.title }}</th>
-	  			<th><a href="{% url 'author' pk=b.author.id %}"><p class="text-center text-primary">{{b.author.name}}</p></a></th>
-		      	<th class="text-center">{{ b.author.publisher.name }}</th>
-		      	<th class="text-center">{{ b.language.name }}</th>
-		      	<th class="text-center">{{ b.display_genre }}</th>
-		      	{% if b.num_books %}
-		      	<th class="text-success text-center">{{ b.num_books }}</th>
-		      	{% else %}
-		      	<th class="text-danger text-center">{{ b.num_books }}</th>
-		      	{% endif %}
-	  			<th><form action="{% url 'book' pk=b.id %}" class="d-flex">
-		        <button class="btn btn-outline-primary" type="submit">View</button>
-		      	</form></th>
-	  		</tr>
-	     {% endfor %}
-	{% else %}
-		<p class="fs-5 text-danger text-center fw-bold">No Books Found....</p>
-	{% endif %}
-</tbody>
-</table>
+{%if book_count %}
+  <p class="fs-4 text-center">Number of Book(s) found {{book_count}}</p>
+  <table class="table table-hover">
+      <thead>
+        <tr>
+            <th scope="col">Book</th>
+            <th scope="col">Author</th>
+            <th scope="col">Publisher</th>
+            <th scope="col">Language</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in books %}
+        <tr>
+          <th>{{ b.title }}</th>
+          {% if user.is_staff %}<th><a href="{% url 'staff_author' pk=b.author.id %}"><p class=" text-primary">{{b.author.name}}</p></a></th>
+          {% else %}<th><a href="{% url 'author' pk=b.author.id %}"><p class=" text-primary">{{b.author.name}}</p></a></th>
+          {% endif %}
+            <th>{{ b.author.publisher.name }}</th>
+            <th>{{ b.language.name }}</th>
+            <th>{{b.display_genre}}</th>
+          {% if user.is_staff %}<th><form action="{% url 'staff_book' pk=b.id %}" class="d-flex">
+            <button class="btn btn-outline-primary" type="submit">View</button>
+            </form></th>
+          {% else %}<th><form action="{% url 'book' pk=b.id %}" class="d-flex">
+            <button class="btn btn-outline-primary" type="submit">View</button>
+            </form></th>
+          {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  <hr>
+{% else %}
+  <br><br><br><br>
+  <p class="fs-2 text-center text-danger text-capitalize fw-bolder">No Books/Authors/Genres Found</p>
+  <p class="fs-4 text-center fw-bold">Please Try Again With Some Other Key Words!!</p>
+{% endif %}
+  </div>

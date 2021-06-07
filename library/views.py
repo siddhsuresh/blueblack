@@ -14,6 +14,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.db.models import Q
 import csv
 
 def View_Dashboard(request):
@@ -62,21 +63,8 @@ def add_book_view(request):
 def all_books_view(request):
 	if request.user.is_staff:
 		return redirect('/staff')
-	ctx={}
-	url_parameter = request.GET.get("q")
-	if url_parameter:
-		books = Book.objects.filter(title__icontains=url_parameter)
-	else:
-		books = Book.objects.all()
-	if request.is_ajax():
-		html = render_to_string(
-			template_name="books-results-partial.html", 
-			context={"books": books}
-		)
-		data_dict = {"html_from_view": html}
-		return JsonResponse(data=data_dict, safe=False)
-	ctx["books"] = books
-	return render(request, "allbooks.html", context=ctx)
+	books=Book.objects.all()
+	return render(request, "allbooks.html", locals())
 
 @login_required(redirect_field_name='dashboard')
 def Author_view(request,pk):
@@ -88,23 +76,28 @@ def Author_view(request,pk):
 
 @login_required(redirect_field_name='dashboard')
 def Search_View(request):
-	empty=flag=False
 	if request.user.is_staff:
 		staff=Staff.objects.get(user=request.user)
-	if request.method=='POST':
-		flag=True
-		search = request.POST.get('search')
-		book_count=Book.objects.filter(title__contains=search).count()
-		author_count=Author.objects.filter(name__contains=search).count()
-		book_genre_count = Book.objects.filter(genre__name__iexact=search).count()
-		if book_count>0:
-			books=Book.objects.filter(title__contains=search)
-		if author_count>0:
-			authors=Author.objects.filter(name__contains=search)
-		if book_genre_count>0:
-			book_genre = Book.objects.filter(genre__name__iexact=search)
-		if book_count==author_count==book_genre_count==0:
-			empty=True
+	books=None
+	url_parameter = request.GET.get("q", None)
+	if url_parameter:
+		books = Book.objects.filter(Q(title__icontains=url_parameter)|Q(author__name__icontains=url_parameter)|Q(genre__name__icontains=url_parameter)|Q(author__publisher__name__icontains=url_parameter)).distinct()
+		if books.count()==0:
+			words = url_parameter.split()
+			print(words)
+			for w in words:
+				b = Book.objects.filter(Q(title__icontains=w)|Q(author__name__icontains=w)|Q(genre__name__icontains=w)|Q(author__publisher__name__icontains=w))
+				print(b)
+				books=books.union(b)
+				print(books)
+		book_count=books.count()
+	if request.is_ajax():
+		html = render_to_string(
+			template_name="books-results-partial.html", 
+			context={"books": books,"book_count":book_count}
+		)
+		data_dict = {"html_from_view": html}
+		return JsonResponse(data=data_dict, safe=False)
 	return render(request, "search.html", locals())
 
 @login_required(redirect_field_name='dashboard')
@@ -185,6 +178,8 @@ def Book_Return_View(request,pk):
 		r.is_fined=True
 		r.save()
 		messages.error(request,'You have been fined!!')
+	renw = RenewRequest.objects.get(book=iss)
+	renw.delete()
 	messages.success(request,  'Your Book Has Been Successfully Returned')
 	return redirect('/', locals())
 """

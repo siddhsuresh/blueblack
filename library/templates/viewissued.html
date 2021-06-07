@@ -61,7 +61,7 @@
 	    </div>
 	  </div>
 	</nav>
-	<h3><center>Student Roll Number: {{student.roll_no}}</center></h3>
+	<div class="fs-3 text-center fw-bold">Student Roll Number: {{student.roll_no}}</div>
 		<table class="table table-hover">
   		<thead>
     		<tr>
@@ -83,15 +83,15 @@
   				<th scope="col">{{b.issue_date}} </th>
   				<th scope="col">{{b.expected_return_date}}</th>
   			{% if b.request_for_renew %}
-  				<th scope="col" class="text-primary fw-bold text-center">Request Pending</th>
+  				<th scope="col" class="fw-bold text-center"><span class="badge bg-success text-wrap">Request Pending</span></th>
   			{% elif b.request_success %}
-  				<th scope="col" class="text-success fw-bold text-center">Only 1 Renew Allowed!!</th>
+  				<th scope="col" class="fw-bold text-center"><span class="badge bg-success text-wrap">Only 1 Renew Allowed!!</span></th>
   			{% elif b.request_denied %}
-  				<th scope="col" class="text-danger fw-bolder text-center">Request Denied</th>
+  				<th scope="col" class="fw-bolder text-center"><span class="badge bg-danger text-wrap">Request Denied</span></th>
   			{% elif not b.can_renew %}
-  				<th scope="col" class="text-warning fw-bold text-center">Only 1 Renew At A Time!!</th>
+  				<th scope="col" class="fw-bold text-center"><span class="badge bg-warning text-wrap">Only 1 Renew At A Time!!</span></th>
   			{% else %}	
-  			<th scope="col" class="fw-bold text-center"><a href="{% url 'book_renew' pk=b.id %}" class="text-secondary">Renew Book</a></th>
+  			<th scope="col" class="fw-bold text-center"><a href="{% url 'book_renew' pk=b.id %}" class="text-secondary">Request Renew</a></th>
   			{% endif %}
   				<th><form action="{% url 'book_return' pk=b.id %}" class="d-flex">
 	        	<button class="btn btn-outline-primary" type="submit">Return</button>

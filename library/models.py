@@ -38,9 +38,6 @@ class Book(models.Model):
     genre = models.ManyToManyField(Genre)
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
 
-    class Meta:
-        ordering = ['title', 'author']
-
     def display_genre(self):
         return ', '.join(genre.name for genre in self.genre.all())
 
