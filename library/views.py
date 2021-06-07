@@ -84,12 +84,9 @@ def Search_View(request):
 		books = Book.objects.filter(Q(title__icontains=url_parameter)|Q(author__name__icontains=url_parameter)|Q(genre__name__icontains=url_parameter)|Q(author__publisher__name__icontains=url_parameter)).distinct()
 		if books.count()==0:
 			words = url_parameter.split()
-			print(words)
 			for w in words:
 				b = Book.objects.filter(Q(title__icontains=w)|Q(author__name__icontains=w)|Q(genre__name__icontains=w)|Q(author__publisher__name__icontains=w))
-				print(b)
 				books=books.union(b)
-				print(books)
 		book_count=books.count()
 	if request.is_ajax():
 		html = render_to_string(
