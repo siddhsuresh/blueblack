@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    {% include 'csscdn.html' %}
     <title>Search Books</title>
     <style>
       a {
@@ -66,110 +65,7 @@
     </style>
   </head>
   <body>
-    {% if user.is_staff %}
-  <nav class="navbar nav-pills navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Library Staff</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/staff">Dashboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/admin">Go to Admin</a>
-          </li>
-          <li class="nav-item dropdown active">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Books
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="{% url 'staff_allbooks'%}">All Books</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/search">Search Books</a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown active">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Users
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="{% url 'staff_allstudents' %}">All Students</a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {{ staff.name }}
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Staff Profile</a></li>
-            </ul>
-          </li>
-        </ul>
-        {% if user.is_authenticated %}
-        <form action="{% url 'logout' %}" class="d-flex">
-          <button class="btn btn-outline-success" type="submit">Logout</button>
-        </form>
-        {% else %}
-        <form action="{% url 'login' %}" class="d-flex">
-          <button class="btn btn-outline-primary" type="submit">Login</button>
-        </form>
-        {% endif %}
-      </div>
-    </div>
-  </nav>
-  {% else %}
-  <nav class="navbar nav-pills navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Library Student</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/">Dashboard</a>
-          </li>
-          <li class="nav-item dropdown active">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Books
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="/allbooks">All Books</a></li>
-              <li><hr class="dropdown-divider"></li>
-              {% if user.is_authenticated %}
-              <li><a class="dropdown-item" href="/search">Search Books</a></li>
-              {% endif %}
-            </ul>
-          </li>
-          {% if user.is_authenticated %}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {{ user.username }}
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="/profile">Profile</a></li>
-              <li><a class="dropdown-item" href="/viewissued">All Issued Books</a></li>
-              <li><a class="dropdown-item" href="/history" target="_blank">History</a></li>
-            </ul>
-          </li>
-          {% endif %}
-        </ul>
-        {% if user.is_authenticated %}
-        <form action="{% url 'logout' %}" class="d-flex">
-          <button class="btn btn-outline-success" type="submit">Logout</button>
-        </form>
-        {% else %}
-        <form action="{% url 'login' %}" class="d-flex">
-          <button class="btn btn-outline-primary" type="submit">Login</button>
-        </form>
-        {% endif %}
-      </div>
-    </div>
-  </nav>
-  {% endif %}
+  {% include 'navbar.html' %}
   <br>
   <div class="container-md">
     <div class="input-group rounded">
@@ -184,6 +80,7 @@
   </div>
   <br>
   <div class="container-fluid">
+  <p class="fs-4 text-center hidden fw-bold" id="pskeleton">Searching...</p>
   <table class="table table-hover hidden" id="table-skeleton">
         <thead>
           <tr>
@@ -192,6 +89,7 @@
               <th scope="col">Publisher</th>
               <th scope="col">Language</th>
               <th scope="col">Genre</th>
+              <th scope="col">Available Books</th>
               <th scope="col">Actions</th>
           </tr>
         </thead>
@@ -215,28 +113,37 @@
           <td class="loading">
             <div class="bar"></div>
           </td>
-        </tr>
-         <tr>
-          <td class="loading">
-            <div class="bar"></div>
-          </td>
-          <td class="loading">
-            <div class="bar"></div>
-          </td>
-          <td class="loading">
-            <div class="bar"></div>
-          </td>
-          <td class="loading">
-            <div class="bar"></div>
-          </td>
-          <td class="loading">
-            <div class="bar"></div>
-          </td>
           <td class="loading">
             <div class="bar"></div>
           </td>
         </tr>
          <tr>
+          <td class="loading">
+            <div class="bar"></div>
+          </td>
+          <td class="loading">
+            <div class="bar"></div>
+          </td>
+          <td class="loading">
+            <div class="bar"></div>
+          </td>
+          <td class="loading">
+            <div class="bar"></div>
+          </td>
+          <td class="loading">
+            <div class="bar"></div>
+          </td>
+          <td class="loading">
+            <div class="bar"></div>
+          </td>
+          <td class="loading">
+            <div class="bar"></div>
+          </td>
+        </tr>
+         <tr>
+          <td class="loading">
+            <div class="bar"></div>
+          </td>
           <td class="loading">
             <div class="bar"></div>
           </td>
@@ -269,6 +176,7 @@
     const search_icon = $('#search-icon')
     const books_div = $('#replaceable-content')
     const skeleton = $('#table-skeleton')
+    const pskeleton = $('#pskeleton')
     const endpoint = '/search'
     const delay_by_in_ms = 1000
     let scheduled_function = false
@@ -278,6 +186,7 @@
             .done(response => {
                 books_div.html(response['html_from_view'])
                 skeleton.addClass('hidden');
+                pskeleton.addClass('hidden');
                 books_div.removeClass('hidden');
                 search_icon.removeClass('blink');
                 })
@@ -299,6 +208,7 @@
         // start animating the search icon with the CSS class
         search_icon.addClass('blink');
         skeleton.removeClass('hidden');
+        pskeleton.removeClass('hidden');
         // if scheduled_function is NOT false, cancel the execution of the function
         if (scheduled_function) {
             clearTimeout(scheduled_function)

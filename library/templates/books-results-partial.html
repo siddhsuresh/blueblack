@@ -1,5 +1,9 @@
 {%if book_count %}
-  <p class="fs-4 text-center">Number of Book(s) found {{book_count}}</p>
+  <p class="fs-4 text-center fw-bold">Number of Book(s) found <span class="text-success">{{book_count}}</span></p>
+{% else %}
+  <p class="fs-4 text-center text-danger text-capitalize fw-bold">No Books Found...</p>
+  <p class="fs-5 text-center fw-bolder">Try Again With Some Other Key Words!!</p>
+{% endif %}
   <table class="table table-hover">
       <thead>
         <tr>
@@ -8,6 +12,7 @@
             <th scope="col">Publisher</th>
             <th scope="col">Language</th>
             <th scope="col">Genre</th>
+            <th scope="col">Available Books</th>
             <th scope="col">Actions</th>
         </tr>
       </thead>
@@ -16,11 +21,17 @@
         <tr>
           <th>{{ b.title }}</th>
           {% if user.is_staff %}<th><a href="{% url 'staff_author' pk=b.author.id %}"><p class=" text-primary">{{b.author.name}}</p></a></th>
-          {% else %}<th><a href="{% url 'author' pk=b.author.id %}"><p class=" text-primary">{{b.author.name}}</p></a></th>
+          {% else %}<th><a href="{% url 'author' pk=b.author.id %}" style="color: blue;
+      text-decoration: none;"><p class=" text-primary">{{b.author.name}}</p></a></th>
           {% endif %}
             <th>{{ b.author.publisher.name }}</th>
             <th>{{ b.language.name }}</th>
             <th>{{b.display_genre}}</th>
+            {% if b.num_books %}
+            <th class="text-success">{{ b.num_books }}</th>
+            {% else %}
+            <th class="text-danger">{{ b.num_books }}</th>
+            {% endif %}
           {% if user.is_staff %}<th><form action="{% url 'staff_book' pk=b.id %}" class="d-flex">
             <button class="btn btn-outline-primary" type="submit">View</button>
             </form></th>
@@ -32,10 +43,3 @@
         {% endfor %}
     </tbody>
   </table>
-  <hr>
-{% else %}
-  <br><br><br><br>
-  <p class="fs-2 text-center text-danger text-capitalize fw-bolder">No Books/Authors/Genres Found</p>
-  <p class="fs-4 text-center fw-bold">Please Try Again With Some Other Key Words!!</p>
-{% endif %}
-  </div>
