@@ -1,0 +1,8 @@
+https://hypercolor.dev/
+TailwindCSS
+To Change the direction of the gradient just change the t->r or r->t [that is t-top r-right l-left and so on]
+
+bg-gradient-to-r from-green-200 via-green-300 to-blue-500 - Seafoam
+bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 - Cotton Candy
+bg-gradient-to-t from-green-200 via-green-400 to-purple-700 - Pandora
+bg-gradient-to-t from-red-400 via-gray-300 to-blue-500- BombPop
