@@ -110,10 +110,10 @@
 		</div>
 		<div class="col">
 			<div class="card text-center">
-			{% if flag3 %}    
+			{% if flag3 %}
 			<div class="card-header text-danger fw-bold">You Have Passed the Deadline for the Books!!</div>
 			{% else %}
-				<div class="card-title text-primary">RETURN ONLY {{time_left}} 
+				<div class="card-title text-primary">RETURN ONLY {{time_left}}
 			    {% if flag1 %} minutes
 			    {% elif flag2 %} seconds
 			    {% else %} hours
@@ -131,7 +131,7 @@
 	{% endif %}
 </div>-->
 	{% if user.is_authenticated %}
-	<p class="fs-2 text-uppercase fw-bolder text-center">Information</p>
+	<!--<p class="fs-2 text-uppercase fw-bolder text-center">Information</p>
 	<br>
 	<div class="container float-right">
 	  <div class="row text-center">
@@ -149,10 +149,10 @@
 			    <div class="p-3 border bg-light fw-bold">{{i2.borrowed_book.book.title}}</div>
 			</div>
 			<div class="col-3 bg text-center">
-			{% if flag3 %}    
+			{% if flag3 %}
 			<div class="p-3 border bg-danger text-light fw-bold">You Have Passed the Deadline for the Books!!</div>
 			{% else %}
-				<div class="p-3 border bg-danger text-light fw-bold">RETURN ONLY {{time_left}} 
+				<div class="p-3 border bg-danger text-light fw-bold">RETURN ONLY {{time_left}}
 			    {% if flag1 %} minutes
 			    {% elif flag2 %} seconds
 			    {% else %} hours
@@ -175,7 +175,33 @@
 			</div>
 		</div>
 	</div>
-	{% endif %}
+	-->
+	<div class="relative overflow-hidden mb-8">
+  <div class="rounded-t-xl overflow-hidden bg-white p-8">
+  <div class="grid grid-cols-2 gap-8">
+    <div class="bg-red-600 h-12 rounded-md flex justify-center items-center text-white text-2xl font-bold">Fine</div>
+      <div class="bg-blue-500 h-12 rounded-md flex justify-center items-center text-white text-2xl font-bold">Number Of Books Due</div>
+      <div class="bg-red-400 h-12 rounded-md flex justify-center items-center text-white text-xl font-bold">{{student.fine}}</div>
+      <div class="bg-blue-400 h-12 rounded-md flex justify-center items-center text-white text-xl font-bold">{{student.num_books}}</div>
+   <div class="col-span-2 bg-red-500 h-12 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">Recomended Books</div>
+    <div class="bg-blue-400 h-12 rounded-md flex justify-center items-center text-white text-xl font-bold"><a href="{% url 'book' pk=book.id%}" style="color:white;">{{book.title}}</a></div>
+    <div class="bg-blue-400 h-12 rounded-md flex justify-center items-center text-white text-xl font-bold">With {{number_of_time_issued}} books issued</div>
+  <div class="col-span-2 bg-blue-500 h-12 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">Your Actions</div>
+       <div class="bg-green-500 h-12 rounded-md flex justify-center items-center text-white text-2xl font-bold">Last Book Issued</div>
+       <div class="bg-red-500 h-12 rounded-md flex justify-center items-center text-white text-2xl font-bold">{% if not flag3 %}Time Left {{time_left}}
+			    {% if flag1 %} minutes
+			    {% elif flag2 %} seconds
+			    {% else %} hours
+			    {% endif %}
+				to go !!
+				{% else %}
+				You Have Passed the Deadline for the Book!!
+				{% endif %}</div>
+      <div class="bg-green-400 h-12 rounded-md flex justify-center items-center text-white text-xl font-bold"><a href="{% url 'all_issued' %}" style="color:white;"> {{i1.borrowed_book.book.title}}</a></div>
+      <div class="bg-red-400 h-12 rounded-md flex justify-center items-center text-white text-xl font-bold"><a href="{% url 'all_issued' %}" style="color:white;"> {{i1.borrowed_book.book.title}}</a></div>
+    </div>
+</div>
+{% endif %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
   </body>
 </html>
