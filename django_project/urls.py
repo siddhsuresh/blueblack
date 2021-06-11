@@ -21,7 +21,8 @@ from django.conf.urls import url
 from django.contrib.auth.views import LoginView, LogoutView
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('history/', History_view, name='history'),
+    path('history/', ReturnListView, name='history'),
+    path('history/csv', History_view, name='csv'),
     path('addbook/', add_book_view),
     path('allbooks/', all_books_view, name='allbooks'),
     path('search/', Search_View, name='search'),

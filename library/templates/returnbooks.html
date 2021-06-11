@@ -1,0 +1,109 @@
+<html>
+	<head>
+		<title>History</title>
+		<meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	{% include 'csscdn.html' %}
+    	<style>
+    	a {
+			color: black;
+			text-decoration: none;
+		}
+		</style>
+	</head>
+	<body>
+	{% include 'navbar.html' %}
+	<section class="text-white bg-gray-800 body-font">
+		<div class="container px-5 py-2 x-auto align-middle">
+    		<div class="flex flex-wrap -m-4 text-center content-center items-center align-middle">
+    			<div class="p-4 sm:w-1/4 w-1/2 items-center align-middle">
+        			<h2 class="title-font font-bold sm:text-xl text-3xl text-white">{{user.username}}</h2>
+        			<p class="leading-relaxed">Roll Number</p>
+      			</div>
+    			<div class="p-4 sm:w-1/4 w-1/2 items-center align-middle">
+        			<h2 class="title-font font-bold sm:text-xl text-3xl text-white">{{student.name}}</h2>
+        			<p class="leading-relaxed">Name</p>
+      			</div>
+    			<div class="p-4 sm:w-1/4 w-1/2 items-center align-middle">
+        			<h2 class="title-font font-bold sm:text-xl text-3xl text-white">{{student.frratio}}</h2>
+        			<p class="leading-relaxed">Fine/Return Books %</p>
+      			</div>
+      			<div class="p-4 sm:w-1/4 w-1/2 items-center align-middle">
+        			<h2 class="title-font font-bold sm:text-xl text-3xl text-white"><a class="btn btn-success" href="{% url 'csv'%}"><span><i class="fas fa-file-csv"></i></span> Download</a></h2>
+        			<p class="leading-relaxed">Download as CSV</p>
+      			</div>
+  			</div>
+		</div>
+	</section>
+<div class="card">
+    <div class="table-responsive">
+			<table class="table table-bordered table-hover">
+  		<thead>
+    		<tr>
+      			<th scope="col">Book</th>
+      			<th scope="col" class="text-center">Author</th>
+      			<th scope="col" class="text-center">Genre</th>
+      			<th scope="col" class="text-center">Issued Date</th>
+      			<th scope="col" class="text-center">Expected Return Date</th>
+      			<th scope="col" class="text-center">Actual Return Date</th>
+      			<th scope="col" class="text-center">Renew Request</th>
+      			<th scope="col" class="text-center">Fine</th>
+    		</tr>
+  		</thead>
+  		<tbody>
+  	{% if books %}
+	  	{% for b in books  %}
+	  		<tr>
+	  			<th>{{ b.borrowed_book.borrowed_book.book.title }}</th>
+	  			<th class="text-center">{{b.borrowed_book.borrowed_book.book.author.name}}</th>
+		      <th class="text-center">{{ b.borrowed_book.borrowed_book.book.display_genre }}</th>
+		      <th class="text-center">{{b.borrowed_book.issue_date}} </th>
+  				<th class="text-center">{{b.borrowed_book.expected_return_date}}</th>
+  				<th class="text-center">{{b.actual_return_date}}</th>
+  				{% if b.borrowed_book.request_denied %}
+  				<th class="text-center text-danger">Request Denied</th>
+  				{% elif b.borrowed_book.request_success%}
+  				<th class="text-center text-success">Request Accepted</th>
+  				{% else %}
+  				<th class="text-center text-primary">None</th>
+  				{% endif %}
+  				{% if b.is_fined %}
+  				<th class="text-danger text-center">100</th>
+  				{% else %}
+  				<th class="text-center text-success">0</th>
+  				{% endif %}
+	  		</tr>
+	     {% endfor %}
+	{% else %}
+		<p class="fs-5 text-danger text-center fw-bold">No Returns Yet....</p>
+	{% endif %}
+</tbody>
+</table>
+</div>
+</div>
+{% if books.has_other_pages %}
+<nav aria-label="Page Navigation">
+  <ul class="pagination justify-content-center py-2">
+    {% if books.has_previous %}
+    <li class="page-item">  <a href="?page={{ books.previous_page_number }}" class="page-link">Previous</a></li>
+    {% else %}
+    <li class="page-item disabled">	<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+    {% endif %}
+    {% for i in books.paginator.page_range %}
+      {% if books.number == i %}
+        <li class="page-item active"><a href="?page={{ i }}" class="page-link">{{ i }}</a></li>
+      {% else %}
+        <li class="page-item"><a href="?page={{ i }}" class="page-link">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if books.has_next %}
+      <li class="page-item"><a href="?page={{ books.next_page_number }}" class="page-link">Next</a></li>
+    {% else %}
+      <li class="page-item disabled">	<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+	</body>
+</html>

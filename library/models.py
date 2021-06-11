@@ -132,6 +132,15 @@ class Student(models.Model):
     def num_books(self):
         return IssueBook.objects.filter(student=self, is_returned=False).count()
 
+    def num_return(self):
+        return ReturnBook.objects.filter(borrowed_book__student=self).count()
+
+    def frratio(self):
+        fine = ReturnBook.objects.filter(borrowed_book__student=self,is_fined=True).count()
+        ret = ReturnBook.objects.filter(borrowed_book__student=self).count()
+        ratio = round(fine/ret*100)
+        return ratio
+
 class Staff(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     roll_no = models.CharField(max_length=10)

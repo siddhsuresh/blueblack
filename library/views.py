@@ -15,6 +15,7 @@ from xhtml2pdf import pisa
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import csv
 
 def View_Dashboard(request):
@@ -24,8 +25,15 @@ def View_Dashboard(request):
 		flag1=flag2=flag3=False
 		student=Student.objects.get(user=request.user)
 		c_i=IssueBook.objects.all().count()
+		ci=IssueBook.objects.filter(student=student)
+		cic=ci.count()
+		cr=ReturnBook.objects.filter(borrowed_book__student=student).count()
+		crf=ReturnBook.objects.filter(borrowed_book__student=student,is_fined=True).count()
 		if c_i:
 			result = IssueBook.objects.values('borrowed_book__book__title').annotate(count=Count('borrowed_book'))
+			res = ci.values('borrowed_book__book__genre__name').annotate(count=Count('borrowed_book'))
+			re = res.order_by('-count').first()
+			genrename = re['borrowed_book__book__genre__name']
 			r=result.order_by('-count').first()
 			name=r['borrowed_book__book__title']
 			number_of_time_issued = r['count']
@@ -64,6 +72,7 @@ def all_books_view(request):
 	if request.user.is_staff:
 		return redirect('/staff')
 	books=Book.objects.all()
+	bc = books.count()
 	return render(request, "allbooks.html", locals())
 
 @login_required(redirect_field_name='dashboard')
@@ -201,6 +210,21 @@ def History_view(request):
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
 """
+@login_required(redirect_field_name='dashboard')
+def ReturnListView(request):
+	student=Student.objects.get(user=request.user)
+	returnbooks = ReturnBook.objects.filter(borrowed_book__student=student)
+	page = request.GET.get('page', 1)
+	paginator = Paginator(returnbooks, 10)
+	try:
+		books = paginator.page(page)
+	except PageNotAnInteger:
+		books = paginator.page(1)
+	except EmptyPage:
+		books = paginator.page(paginator.num_pages)
+
+	return render(request, 'returnbooks.html', locals())
+
 @login_required(redirect_field_name='dashboard')
 def History_view(request):
     student=Student.objects.get(user=request.user)
