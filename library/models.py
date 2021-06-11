@@ -77,7 +77,7 @@ class IssueBook(models.Model):
 
     def __str__(self):
         return self.student.name+" has been issued "+self.borrowed_book.book.title+" on "+str(self.issue_date)
-    
+
     def can_renew(self):
         if RenewRequest.objects.filter(book__student__id=self.student.id, request='p').count()==0:
             return True
@@ -150,7 +150,7 @@ class Staff(models.Model):
         return str(self.roll_no)
 
 class RenewRequest(models.Model):
-    staff = models.OneToOneField(Staff, on_delete=models.SET_NULL, null=True, blank=True)
+    staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank=True)
     book = models.OneToOneField('IssueBook',  on_delete = models.CASCADE , null=True, blank=True)
     #number_of_days = models.IntegerField(default=1, null=True, blank=True)
     #reason = models.CharField(max_length=100, null=True, blank=True)

@@ -99,7 +99,7 @@ def Search_View(request):
 		book_count=books.count()
 	if request.is_ajax():
 		html = render_to_string(
-			template_name="books-results-partial.html", 
+			template_name="books-results-partial.html",
 			context={"books": books,"book_count":book_count}
 		)
 		data_dict = {"html_from_view": html}
@@ -133,8 +133,7 @@ def Individual_books_view(request,pk):
 	student=Student.objects.get(user=request.user)
 	if IssueBook.objects.filter(borrowed_book__book=book, student=student, is_returned=False).count():
 		Already_Taken=True
-	if not Already_Taken:
-		dataset=BookIndividual.objects.filter(book=book, status='a')
+	dataset=BookIndividual.objects.filter(book=book, status='a')
 	return render(request, "books.html", locals())
 
 @login_required(redirect_field_name='dashboard')
@@ -184,8 +183,10 @@ def Book_Return_View(request,pk):
 		r.is_fined=True
 		r.save()
 		messages.error(request,'You have been fined!!')
-	renw = RenewRequest.objects.get(book=iss)
-	renw.delete()
+	if RenewRequest.objects.filter(book=iss).exists():
+	    renw = RenewRequest.objects.get(book=iss)
+	    if renw.request=='p':
+	        renw.delete()
 	messages.success(request,  'Your Book Has Been Successfully Returned')
 	return redirect('/', locals())
 """
