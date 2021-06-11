@@ -130,6 +130,7 @@
 		</div>
 	{% endif %}
 </div>-->
+	{% if user.is_authenticated %}
 <section class="text-white bg-gray-900 body-font">
   <div class="container px-5 py-2 x-auto">
     <div class="flex flex-wrap -m-4 text-center">
@@ -152,7 +153,7 @@
     </div>
   </div>
 </section>
-	{% if user.is_authenticated %}
+
 	<p class="fs-2 text-uppercase fw-bolder text-center py-2">Your Actions </p>
 	<br>
 	<div class="container float-right">

@@ -81,8 +81,8 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="/allbooks"><span><i class="fas fa-book"></i></span>&nbspAll Books</a></li>
-              <li><hr class="dropdown-divider"></li>
               {% if user.is_authenticated %}
+              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/search"><span><i class="fas fa-search"></i></span>&nbspSearch Books</a></li>
               {% endif %}
             </ul>
