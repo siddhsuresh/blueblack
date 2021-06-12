@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Genre(models.Model):
 	name = models.CharField(max_length=100)
@@ -78,6 +79,11 @@ class IssueBook(models.Model):
     def __str__(self):
         return self.student.name+" has been issued "+self.borrowed_book.book.title+" on "+str(self.issue_date)
 
+    def overdue(self):
+        time=self.expected_return_date-timezone.now()
+        if time.total_seconds()<0:
+            return True
+        return False
     def can_renew(self):
         if RenewRequest.objects.filter(book__student__id=self.student.id, request='p').count()==0:
             return True
@@ -138,6 +144,8 @@ class Student(models.Model):
     def frratio(self):
         fine = ReturnBook.objects.filter(borrowed_book__student=self,is_fined=True).count()
         ret = ReturnBook.objects.filter(borrowed_book__student=self).count()
+        if ret==0:
+            return "No Books Returned Yet"
         ratio = round(fine/ret*100)
         return ratio
 

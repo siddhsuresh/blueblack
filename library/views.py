@@ -25,15 +25,19 @@ def View_Dashboard(request):
 		flag1=flag2=flag3=False
 		student=Student.objects.get(user=request.user)
 		c_i=IssueBook.objects.all().count()
-		ci=IssueBook.objects.filter(student=student)
-		cic=ci.count()
-		cr=ReturnBook.objects.filter(borrowed_book__student=student).count()
-		crf=ReturnBook.objects.filter(borrowed_book__student=student,is_fined=True).count()
+		if IssueBook.objects.filter(student=student).exists():
+		    exists=True
+		    ci=IssueBook.objects.filter(student=student)
+		    cic=ci.count()
+		    cr=ReturnBook.objects.filter(borrowed_book__student=student).count()
+		    crf=ReturnBook.objects.filter(borrowed_book__student=student,is_fined=True).count()
+		    res = ci.values('borrowed_book__book__genre__name').annotate(count=Count('borrowed_book'))
+		    re = res.order_by('-count').first()
+		    genrename = re['borrowed_book__book__genre__name']
+		else:
+		    exists=False
 		if c_i:
 			result = IssueBook.objects.values('borrowed_book__book__title').annotate(count=Count('borrowed_book'))
-			res = ci.values('borrowed_book__book__genre__name').annotate(count=Count('borrowed_book'))
-			re = res.order_by('-count').first()
-			genrename = re['borrowed_book__book__genre__name']
 			r=result.order_by('-count').first()
 			name=r['borrowed_book__book__title']
 			number_of_time_issued = r['count']
