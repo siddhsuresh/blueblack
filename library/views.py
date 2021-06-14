@@ -61,6 +61,13 @@ def View_Dashboard(request):
 				if time_left==0:
 					flag2=True
 					time_left = time1.total_seconds()
+		rr=False
+		if RenewRequest.objects.filter(book__student=student,book__is_returned=False).exists():
+			rr=True
+			if RenewRequest.objects.filter(book__student=student,request='p',book__is_returned=False).exists():
+				renew = RenewRequest.objects.get(book__student=student,request='p',book__is_returned=False)
+			else:
+				renew = RenewRequest.objects.filter(Q(book__student=student)&Q(book__is_returned=False)&(Q(request='a')|Q(request='d'))).order_by('-date').first()
 	return render(request, "Dashboard.html", locals())
 
 @login_required(redirect_field_name='dashboard')
@@ -361,6 +368,7 @@ def View_Staff_Approve_Renew(request,pk):
 	r = RenewRequest.objects.get(id=pk)
 	r.request = 'a'
 	r.staff = Staff.objects.get(user=request.user)
+	r.date = timezone.now()
 	r.save()
 	r.book.expected_return_date+=timedelta(days=1)
 	r.book.save()
@@ -373,5 +381,6 @@ def View_Staff_Deny_Renew(request,pk):
 	r = RenewRequest.objects.get(id=pk)
 	r.staff = Staff.objects.get(user=request.user)
 	r.request = 'd'
+	r.date = timezone.now()
 	r.save()
 	return redirect('/staff', locals())

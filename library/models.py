@@ -160,10 +160,19 @@ class Staff(models.Model):
 class RenewRequest(models.Model):
     staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank=True)
     book = models.OneToOneField('IssueBook',  on_delete = models.CASCADE , null=True, blank=True)
-    #number_of_days = models.IntegerField(default=1, null=True, blank=True)
-    #reason = models.CharField(max_length=100, null=True, blank=True)
     REQUEST_STATUS = (('p', 'Pending'), ('a', 'Approved'),('d','Denied'))
     request = models.CharField(max_length=1, choices=REQUEST_STATUS, blank=True, default='p')
+    date = models.DateTimeField(null=True,blank=True)
 
     def __str__(self):
         return self.book.student.name +" has requested 1 day extension for the book "+self.book.borrowed_book.book.title
+
+    def is_approv(self):
+        if self.request=='a':
+            return True
+        return False
+
+    def is_den(self):
+        if self.request=='d':
+            return True
+        return False

@@ -155,6 +155,106 @@
 			</div>
 		   {% endfor %}
 	{% endif %}
+	<div class="container items-center px-5 py-12 lg:px-20">
+  <div class="flex flex-wrap ">
+  	{% if rr %}
+	  	{% if renew.is_approv %}
+	    <div class="w-full mx-auto my-4 bg-green-500 border rounded-lg shadow-xl lg:w-1/4">
+	      <div class="p-6">
+	        <h2 class="mb-8 text-xs font-semibold tracking-widest text-white uppercase title-font">Renew Request</h2>
+	        <h4 class="mb-8 text-2xl font-semibold leading-none tracking-tighter text-black lg:text-3xl title-font text-white"><i class="far fa-check-circle"></i> Approved</h4>
+	        <p class="mb-3 text-base leading-relaxed text-white">Your Deadline For <span class="font-bold"> {{renew.book.borrowed_book.book.title}}</span> Has Been Extended</p>
+	        <button class="w-full px-16 py-2 my-2 text-base font-medium text-white transition duration-500 ease-in-out transform border-black rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-blue-900 "><span><a href="{% url 'all_issued' %}" class="uppercase text-white">View issued books</a></span></button>
+	      </div>
+	    </div>
+	    {% elif renew.is_den %}
+	    <div class="w-full mx-auto my-4 bg-red-500 border rounded-lg shadow-xl lg:w-1/4">
+	      <div class="p-6">
+	        <h2 class="mb-8 text-xs font-semibold tracking-widest text-white uppercase title-font">Renew Request</h2>
+	        <h4 class="mb-8 text-2xl font-semibold leading-none tracking-tighter text-black lg:text-3xl title-font text-white"><i class="far fa-times-circle"></i> Denied</h4>
+	        <p class="mb-3 text-base leading-relaxed text-white">Your Request For <span class="font-bold"> {{renew.book.borrowed_book.book.title}}</span> Has Been Denied</p>
+	        <button class="w-full px-16 py-2 my-2 text-base font-medium text-white transition duration-500 ease-in-out transform border-black rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-blue-900 "><span><a href="{% url 'all_issued' %}" class="uppercase text-white">View issued books</a></span></button>
+	      </div>
+	    </div>
+	    {% else %}
+	    <div class="w-full mx-auto my-4 bg-blue-500 border rounded-lg shadow-xl lg:w-1/4">
+	      <div class="p-6">
+	        <h2 class="mb-8 text-xs font-semibold tracking-widest text-white uppercase title-font">Renew Request</h2>
+	        <h4 class="mb-8 text-2xl font-semibold leading-none tracking-tighter text-black lg:text-3xl title-font text-white"><i class="far fa-check-circle"></i> Pending</h4>
+	        <p class="mb-3 text-base leading-relaxed text-white">Your Deadline For <span class="font-bold"> {{renew.book.borrowed_book.book.title}}</span> Is Being Processed...</p>
+	        <button class="w-full px-16 py-2 my-2 text-base font-medium text-white transition duration-500 ease-in-out transform border-black rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-blue-900 "><span><a href="{% url 'all_issued' %}" class="uppercase text-white">View issued books</a></span></button>
+	      </div>
+	    </div>
+	  	{% endif %}
+    {% else %}
+    <div class="w-full mx-auto my-4 bg-white border rounded-lg shadow-xl lg:w-1/4">
+      <div class="p-6">
+        <h2 class="mb-8 text-xs font-semibold tracking-widest text-black uppercase title-font">Renew Request</h2>
+        <h4 class="mb-8 text-2xl font-semibold leading-none tracking-tighter text-black lg:text-3xl title-font text-blue-500"><i class="far fa-check-circle"></i> No Pending Renew Request...</h4>
+        <p class="mb-3 text-base leading-relaxed text-blueGray-500">You Could Request Extension For The Book<span class="font-bold"> {{i1.borrowed_book.book.title}}</span></p>
+        <button class="w-full px-16 py-2 my-2 text-base font-medium text-white transition duration-500 ease-in-out transform border-black rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-blue-300 "><span><a href="{% url 'all_issued' %}" class="uppercase text-black">View issued books</a></span></button>
+      </div>
+    </div>
+    {% endif %}
+    <div class="w-full mx-auto my-4 bg-white border rounded-lg shadow-xl lg:w-1/4">
+      <div class="p-6">
+        <h2 class="mb-8 text-xs font-semibold tracking-widest text-black uppercase title-font">Recommended Book</h2>
+        <h4 class="mb-8 text-2xl font-semibold leading-none tracking-tighter text-black lg:text-3xl title-font text-green-500">Most Popular Book</h4>
+        <p class="mb-3 font-semibold hover:text-red-500 text-base leading-relaxed text-blueGray-500">{{book.title}} ({{number_of_time_issued}})</p>
+        <button class="w-full px-16 py-2 my-2 text-base font-medium text-white transition duration-500 ease-in-out transform border-black rounded-md bg-green-600 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-blue-900 "><span><a href="{% url 'book' pk=book.id%}" class="uppercase text-white">View Book</a></span></button>
+      </div>
+    </div>
+    <div class="w-full mx-auto my-4 bg-white border rounded-lg shadow-xl lg:w-1/4">
+      <div class="p-6">
+        <h2 class="mb-8 text-xs font-semibold tracking-widest text-black uppercase title-font">Issued Books</h2>
+        <h4 class="mb-8 text-2xl font-semibold leading-none tracking-tighter text-black lg:text-3xl title-font text-red-500">Reminder To Return</h4>
+        {% if flag3 %}
+				<p class="mb-3 text-base leading-relaxed text-blueGray-500">You Have Passed the Deadline For
+				{% else %}
+        <p class="mb-3 text-base leading-relaxed text-blueGray-500"> You Only Have 
+        <span class="text-red-500 font-bold">
+        {{time_left}}
+			  {% if flag1 %} Minutes
+			  {% elif flag2 %} Seconds
+			  {% else %} Hours
+			  {% endif %}
+        Till Overdue</span> For The Book
+        {% endif %}
+        <span class="text-red-500 font-bold">{{i1.borrowed_book.book.title}}</span></p>
+        <button class="w-full px-16 py-2 my-2 text-base font-medium text-white transition duration-500 ease-in-out transform border-black rounded-md bg-red-600 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-green-900 "><span><a href="{% url 'all_issued' %}" class="uppercase text-white">View issued books</a></span></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container items-center px-5 lg:px-20">
+  <div class="flex flex-wrap ">
+    <div class="w-full mx-auto my-4 bg-white border rounded-lg shadow-xl lg:w-1/4">
+      <div class="p-6">
+        <h2 class="mb-8 text-xs font-semibold tracking-widest text-black uppercase title-font">Your Info</h2>
+        <h4 class="mb-8 text-2xl font-semibold leading-none tracking-tighter text-black lg:text-3xl title-font text-red-500">Fine</h4>
+        <p class="mb-3 text-base leading-relaxed text-blueGray-500"> You Currently Have a Fine Of <span class="text-red-500 font-semibold">{{student.fine}}</span></p>
+        <button class="w-full px-16 py-2 my-2 text-base font-medium text-white transition duration-500 ease-in-out transform border-black rounded-md bg-red-600 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-blue-900 "><span><a href="/profile" class="uppercase text-white">View profile</a></span></button>
+      </div>
+    </div>
+    <div class="w-full mx-auto my-4 bg-white border rounded-lg shadow-xl lg:w-1/4">
+      <div class="p-6">
+        <h2 class="mb-8 text-xs font-semibold tracking-widest text-black uppercase title-font">Your Info</h2>
+        <h4 class="mb-8 text-2xl font-semibold leading-none tracking-tighter text-black lg:text-3xl title-font text-blue-500">Number Of Books Due</h4>
+        <p class="mb-3 text-base leading-relaxed text-blueGray-500"> You Have Currently Issued <span class="text-blue-500 font-semibold">{{student.num_books}} Book(s) </span></p>
+        <button class="w-full px-16 py-2 my-2 text-base font-medium text-white transition duration-500 ease-in-out transform border-black rounded-md bg-blue-600 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-blue-900 "><span><a href="{% url 'all_issued' %}" class="uppercase text-white">View issued books</a></span></button>
+      </div>
+    </div>
+    <div class="w-full mx-auto my-4 bg-white border rounded-lg shadow-xl lg:w-1/4">
+      <div class="p-6">
+        <h2 class="mb-8 text-xs font-semibold tracking-widest text-black uppercase title-font">Issued Books</h2>
+        <h4 class="mb-8 text-2xl font-semibold leading-none tracking-tighter text-black lg:text-3xl title-font text-green-500">Last Book Issued</h4>
+        <p class="mb-3 text-base leading-relaxed text-blueGray-500"> Your Last Issued Book Is <span class="text-green-500 font-bold">{{i2.borrowed_book.book.title}}</span></p>
+        <button class="w-full px-16 py-2 my-2 text-base font-medium text-white transition duration-500 ease-in-out transform border-black rounded-md bg-green-600 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-blue-900 "><span><a href="{% url 'all_issued' %}" class="uppercase text-white">View issued books</a></span></button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--
 	<p class="fs-2 text-uppercase fw-bolder text-center py-2">Your Actions </p>
 	<br>
 	<div class="container float-right">
@@ -199,7 +299,6 @@
 			</div>
 		</div>
 	</div>
-	<!--
 	<div class="relative overflow-hidden mb-8">
   <div class="rounded-t-xl overflow-hidden bg-white p-8">
   <div class="grid grid-cols-2 gap-8">
