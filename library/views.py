@@ -34,6 +34,8 @@ def View_Dashboard(request):
 		    res = ci.values('borrowed_book__book__genre__name').annotate(count=Count('borrowed_book'))
 		    re = res.order_by('-count').first()
 		    genrename = re['borrowed_book__book__genre__name']
+		    author = ci.values('borrowed_book__book__author__name').annotate(count=Count('borrowed_book')).order_by('-count').first()
+		    a=author['borrowed_book__book__author__name']
 		else:
 		    exists=False
 		if c_i:

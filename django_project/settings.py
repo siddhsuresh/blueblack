@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'crispy_forms',
+    'widget_tweaks',
     'library',
     'django_extensions',
     'debug_toolbar'
@@ -159,4 +159,4 @@ INTERNAL_IPS = [ 'blueblack.pythonanywhere.com','127.0.0.1']
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+#CRISPY_TEMPLATE_PACK = 'bootstrap4'
