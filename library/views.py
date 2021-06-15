@@ -45,9 +45,9 @@ def View_Dashboard(request):
 			number_of_time_issued = r['count']
 			book = Book.objects.get(title=name)
 		c=IssueBook.objects.filter(student=student, is_returned=False).count()
+		i2=IssueBook.objects.filter(student=student).order_by('-issue_date').first()
 		if c:
 			i1=IssueBook.objects.filter(student=student, is_returned=False).order_by('expected_return_date').first()
-			i2=IssueBook.objects.filter(student=student).last()
 			time1 = i1.expected_return_date
 			time=timezone.now()
 			time1-=time

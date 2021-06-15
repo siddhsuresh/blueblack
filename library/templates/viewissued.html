@@ -106,13 +106,13 @@
         {% elif not b.can_renew %}
             <div class="text-center px-4 py-2 text-xs font-bold rounded opacity-100 bg-yellow-600 text-white">Only 1 Renew At A Time</div>
         {% else %}
-        <button class="component border border-transparent rounded font-bold tracking-wide text-sm px-5 py-2 focus:outline-none focus:shadow-outline bg-indigo-500 text-gray-100 hover:bg-yellow-600 hover:text-white"><span><a href="{% url 'book_renew' pk=b.id %}" class="text-white">Request Renew</a></span></button>
+        <a href="{% url 'book_renew' pk=b.id %}"><button class="component border border-transparent rounded font-bold tracking-wide text-sm px-5 py-2 focus:outline-none focus:shadow-outline bg-indigo-500 text-gray-100 hover:bg-yellow-600 hover:text-white">Request Renew</button></a>
         {% endif %}
           </div>
           </td>
           <td>
             <div class="px-1">
-              <button class="hover:bg-blue-500 focus:ring-2 focus:ring-blue-600 component border border-transparent rounded font-bold tracking-wide text-sm px-5 py-2 focus:outline-none focus:shadow-outline bg-green-500 text-gray-100 hover:text-white"><span><a href="{% url 'book_return' pk=b.id %}" class="text-white">Return</a></span></button>
+              <a href="{% url 'book_return' pk=b.id %}"><button class="hover:bg-blue-500 focus:ring-2 focus:ring-blue-600 component border border-transparent rounded font-bold tracking-wide text-sm px-5 py-2 focus:outline-none focus:shadow-outline bg-green-500 text-gray-100 hover:text-white">Return</button></a>
             </div>
           </td>
           </tr>
