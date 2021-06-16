@@ -202,28 +202,7 @@ def Book_Return_View(request,pk):
 	        renw.delete()
 	messages.success(request,  'Your Book Has Been Successfully Returned')
 	return redirect('/', locals())
-"""
-@login_required(redirect_field_name='dashboard')
-def History_view(request):
-    template_path = 'history.html'
-    student=Student.objects.get(user=request.user)
-    ret= ReturnBook.objects.filter(borrowed_book__student=student)
-    #ret=ReturnBook.objects.filter(borrowed_book=iss).first()
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-    # find the template and render it.
-    template = get_template(template_path)
-    html = template.render(locals())
 
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-       html, dest=response)
-    # if error then show some funy view
-    if pisa_status.err:
-       return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
-"""
 @login_required(redirect_field_name='dashboard')
 def ReturnListView(request):
 	student=Student.objects.get(user=request.user)
@@ -255,26 +234,6 @@ def History_view(request):
         writer.writerow(r)
     response['Content-Disposition'] = 'attachment; filename="Return History.csv"'
     return response
-"""
-def registerPage(request):
-	context={}
-	if request.method == 'POST':
-		form = UserCreationForm(request.POST)
-		student_form = NewStudentForm(request.POST)
-
-		if form.is_valid() and student_form.is_valid():
-			user = form.save()
-
-
-			student.save()
-
-			messages.success(request,  'Your account has been successfully created')
-
-			return redirect('login')
-
-	context = {'form': form, 'student_form': student_form}
-	return render(request, 'registeruser.html', context)
-"""
 
 #All Staff Website Views written here
 @login_required(redirect_field_name='dashboard')
