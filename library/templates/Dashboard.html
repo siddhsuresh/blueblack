@@ -12,116 +12,11 @@
     	a {
 			color: black;
 			text-decoration: none;
-			}/*
-			.card{
-    		border-radius: 4px;
-    		background: #fff;
-    		box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
-      	transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
-  			padding: 14px 80px 18px 36px;
-  			cursor: pointer;
 			}
-			.card:hover{
-     		transform: scale(1.02);
-  			box-shadow: 0 10px 15px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
-			}
-			.card h5{
-  		font-weight: 600;
-		}
-		body {
-		  font-family: 'Nunito', sans-serif;
-		}*/
     </style>
   </head>
   <body>
   {% include 'navbar.html' %}
-	<!--
-	{% if user.is_authenticated %}
-	<br>
-	<div class="container-fluid">
-		<div class="row text-primary">
-		<p class="fs-2 text-uppercase fw-bolder faa-parent animated-hover">
-    	<i class="fa fa-info fa-1x faa-tada" id="info-icon"></i>
-  &nbsp Recommended Books</p>
-	</div>
-	<div class="container">
-	  	<div class="card text-center">
-			    <div class="card-header bg-danger fw-bold text-white">MOST POPULAR BOOK</div>
-			    <div class="card-body text-danger">
-						<h5 class="card-title">{{book.title}}</h5>
-			    <div class="card-title text-primary"><a href="{% url 'book' pk=book.id%}" class="stretched-link"></a></div>
-			    <div class="card-body">With {{number_of_time_issued}} books issued</div>
-			</div>
-	</div>
-</div>
-<br>
-<div class="container-fluid">
-	<div class="row text-primary">
-	<p class="fs-2 text-uppercase fw-bolder faa-parent animated-hover">
-    	<i class="fa fa-info fa-1x faa-tada" id="info-icon"></i>
-  &nbsp Information</p>
-	</div>
-  <div class="row">
-    <div class="col">
-			<div class="card text-center">
-			  <div class="card-header fw-bold">Number of Books Due</div>
-			  	<div class="card-body text-primary">
-			    	<h5 class="card-title">{{student.num_books}}</h5>
-			    	<a href="{% url 'all_issued' %}" class="stretched-link">View All Books Currently Issued</a>
-			  	</div>
-			</div>
-		</div>
-		<div class="col">
-			<div class="card text-center">
-			  <div class="card-header text-danger fw-bold">Fine</div>
-			  	<div class="card-body text-danger">
-			    	<h5 class="card-title">{{student.fine}}</h5>
-			    	<a href="/profile" class="stretched-link">Go To Profile</a>
-			  	</div>
-			</div>
-		</div>
-	</div>
-</div>
-<br>
-<div class="container-fluid">
-	<div class="row text-primary">
-	<p class="fs-2 text-uppercase fw-bolder faa-parent animated-hover">
-    	<i class="fa fa-info fa-1x faa-tada" id="info-icon"></i>
-  &nbsp Issue Information</p>
- 	</div>
-		{% if c %}
-	<div class="row">
-		<div class="col">
-			<div class="card text-center">
-			  <div class="card-header text-primary fw-bold">Last Book Issued</div>
-			  	<div class="card-body text-primary">
-			    	<h5 class="card-title">{{i2.borrowed_book.book.title}}</h5>
-			    	<a href="{% url 'all_issued' %}" class="stretched-link">View All Books Currently Issued</a>
-			  	</div>
-			</div>
-		</div>
-		<div class="col">
-			<div class="card text-center">
-			{% if flag3 %}
-			<div class="card-header text-danger fw-bold">You Have Passed the Deadline for the Books!!</div>
-			{% else %}
-				<div class="card-title text-primary">RETURN ONLY {{time_left}}
-			    {% if flag1 %} minutes
-			    {% elif flag2 %} seconds
-			    {% else %} hours
-			    {% endif %}
-				to go !!</div>
-			{% endif %}
-			<div class="card-body text-danger">
-					<h5 class="card-title">{{i1.borrowed_book.book.title}}</h5>
-			    <div class="card-title"><a href="{% url 'all_issued' %}" class="stretched-link">Go To Your Issued Books!!</a></div>
-			</div>
-			</div>
-			{% endif %}
-			</div>
-		</div>
-	{% endif %}
-</div>-->
 {% if user.is_authenticated %}
 {% if exists %}
 <section class="text-white bg-gray-900 body-font">
