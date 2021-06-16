@@ -14,45 +14,6 @@
   </head>
   <body>
   {% include 'navbar.html' %}
-  <!--<div class="fs-3 text-center fw-bold">Student Roll Number: {{student.roll_no}}</div>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Book Title</th>
-            <th scope="col">Book ID</th>
-            <th scope="col">Edition</th>
-            <th scope="col">Issued Date</th>
-            <th scope="col">Expected Return Date</th>
-            <th scope="col">Request For Book Renewal</th>
-            <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for b in book_list %}
-        <tr>
-          <th scope="col">{{ b.borrowed_book.book.title }}</th>
-          <th scope="col">{{ b.borrowed_book.id }} </th>
-          <th scope="col">{{b.borrowed_book.edition}} </th>
-          <th scope="col">{{b.issue_date}} </th>
-          <th scope="col">{{b.expected_return_date}}</th>
-        {% if b.request_for_renew %}
-          <th scope="col" class="fw-bold text-center"><span class="badge rounded-pill bg-success text-wrap">Request Pending</span></th>
-        {% elif b.request_success %}
-          <th scope="col" class="fw-bold text-center"><span class="badge rounded-pill bg-info text-wrap">Only 1 Renew Allowed!!</span></th>
-        {% elif b.request_denied %}
-          <th scope="col" class="fw-bolder text-center"><span class="badge rounded-pill bg-danger text-wrap">Request Denied</span></th>
-        {% elif not b.can_renew %}
-          <th scope="col" class="fw-bold text-center"><span class="badge rounded-pill bg-warning text-wrap">Only 1 Renew At A Time!!</span></th>
-        {% else %}
-        <th scope="col" class="fw-bold text-center"><a href="{% url 'book_renew' pk=b.id %}" class="text-primary">Request Renew</a></th>
-        {% endif %}
-          <th><form action="{% url 'book_return' pk=b.id %}" class="d-flex">
-            <button class="btn btn-outline-primary" type="submit">Return</button>
-            </form></th>
-        </tr>
-        {% endfor %}
-    </tbody>
-  </table>-->
   <section class="px-8 my-8">
   <h2 class="text-2xl font-bold text-center">Currently Issued Books</h2>
     <div class="flex flex-col my-4">
