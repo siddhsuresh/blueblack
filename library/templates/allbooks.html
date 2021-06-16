@@ -13,41 +13,80 @@
 	</head>
 	<body>
 	{% include 'navbar.html' %}
-	<br>
-	<table class="table table-hover">
-  		<thead>
-    		<tr>
-      			<th scope="col">Book</th>
-      			<th scope="col" class="text-center">Author</th>
-      			<th scope="col" class="text-center">Publisher</th>
-      			<th scope="col" class="text-center">Language</th>
-      			<th scope="col" class="text-center">Genre</th>
-      			<th scope="col" class="text-center">Number of Books Availabe</th>
-      			<th scope="col">Actions</th>
-    		</tr>
-  		</thead>
-  		<tbody>
-  	{% if books %}
+	<div class="flex flex-col">
+	  <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+	    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+	      <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+	        <table class="min-w-full divide-y divide-gray-200">
+	          <thead class="bg-gray-50">
+	            <tr>
+	              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+	                Book
+	              </th>
+	              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+	                Author
+	              </th>
+	              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+	                Publisher
+	              </th>
+	              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+	              Language
+	              </th>
+	              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+	               Genre
+	              </th>
+	              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+	               Availabe Books
+	              </th>
+	              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+	               Actions
+	              </th>
+	            </tr>
+	          </thead>
+	    {% if books %}
 	  	{% for b in books  %}
-	  		<tr>
-	  			<th>{{ b.title }}</th>
-	  			<th><a href="{% url 'author' pk=b.author.id %}"><p class="text-center text-primary">{{b.author.name}}</p></a></th>
-		      	<th class="text-center">{{ b.author.publisher.name }}</th>
-		      	<th class="text-center">{{ b.language.name }}</th>
-		      	<th class="text-center">{{ b.display_genre }}</th>
-		      	{% if b.num_books %}
-		      	<th class="text-success text-center">{{ b.num_books }}</th>
-		      	{% else %}
-		      	<th class="text-danger text-center">{{ b.num_books }}</th>
-		      	{% endif %}
-	  			<th><a href="{% url 'book' pk=b.id %}" class="btn btn-primary">View</a></th>
-	  		</tr>
-	     {% endfor %}
-	{% else %}
-		<p class="fs-5 text-danger text-center fw-bold">No Books Found....</p>
-	{% endif %}
-		</tbody>
-	</table>
+	          <tbody class="bg-white divide-y divide-gray-200">
+	            <tr>
+	              <td class="px-2 py-4 whitespace-nowrap">
+	                <div class="flex items-start">
+	                  <div class="ml-4">
+	                    <div class="text-sm font-medium text-gray-900">
+	                      {{ b.title }}
+	                    </div>
+	                  </div>
+	                </div>
+	              </td>
+	              <td class="px-6 py-4 whitespace-nowrap">
+	                <div class="text-sm font-medium text-gray-900"><a href="{% url 'author' pk=b.author.id %}">{{b.author.name}}</a></div>
+	              </td>
+	              <td class="px-6 py-4 font-medium whitespace-nowrap text-sm text-gray-900">
+	                {{ b.author.publisher.name }}
+	              </td>
+	              <td class="px-6 py-4 font-medium whitespace-nowrap text-sm text-gray-900">
+	                {{ b.language.name }}
+	              </td>
+	              <td class="px-6 py-4 font-medium whitespace-nowrap text-sm text-gray-900">
+	                {{ b.display_genre }}
+	              </td>
+	              <td class="px-6 py-4 whitespace-nowrap">
+	                <span class="px-3 inline-flex text-xs leading-5 text-center font-semibold rounded-full bg-green-600 text-white">
+	                  {{ b.num_books }}
+	                </span>
+	              </td>
+	              <td class="px-6 py-4  whitespace-nowrap text-sm font-medium text-red-600 hover:text-red-900">
+	                <a href="{% url 'book' pk=b.id %}"><button class="component border border-transparent rounded font-bold tracking-wide text-sm px-5 py-2 focus:outline-none focus:shadow-outline bg-blue-500 text-gray-100 hover:bg-green-600 hover:text-white">View</button></a>
+	              </td>
+	            </tr>
+	        {% endfor %}
+	    {% else %}
+				<p class="fs-5 text-danger text-center fw-bold">No Books Found....</p>
+		{% endif %}
+	          </tbody>
+	        </table>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 	</body>
 </html>
