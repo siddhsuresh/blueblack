@@ -20,34 +20,58 @@
 	{% if Already_Taken %}
 	<div class="container-fluid"><p class="fs-4 text-center text-danger fw-bold">You Currently Have This Book Issued!!</p></div>
 	{% endif %}
-		<table class="table table-hover">
-  		<thead>
-    		<tr>
-      			<th scope="col">Book ID</th>
-      			<th scope="col">Book Edition</th>
-      			<th scope="col">Loan Status</th>
-      			<th scope="col">Actions</th>
-    		</tr>
-  		</thead>
-  		<tbody>
+	<div class="flex flex-col">
+    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Book ID
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Edition
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Loan Status
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
   			{% for data in dataset %}
   			<tr>
-  				<th> {{ data.id }} </th>
-  				<th> {{ data.edition }} </th>
-  				<th class="text-success"> {{ data.get_status_display }} </th>
-  				{% if not Already_Taken %}
-  				<th><form action="{% url 'book_issue' pk=data.id %}" class="d-flex">
-	        	<button class="btn btn-outline-primary" type="submit">Issue</button>
-	      		</form></th>
-	      		{% else %}
-	      		<th><form action="{% url 'book_issue' pk=data.id %}" class="d-flex">
-	        	<button class="btn btn-outline-primary" type="submit" disabled>Issue</button>
-	      		</form></th>
-	      		{% endif %}
-  			</tr>
-     		{% endfor %}
-		</tbody>
-	</table>
+  				<td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">{{ data.id }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">{{ data.edition }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-3 inline-flex text-xs leading-5 text-center font-semibold rounded-full bg-green-600 text-white">
+                    {{ data.get_status_display }}
+                  </span>
+                </td>
+                {% if not Already_Taken %}
+                <td class="px-6 py-4  whitespace-nowrap text-sm font-medium text-red-600 hover:text-red-900">
+                  <a href="{% url 'book_issue' pk=data.id %}"><button class="component border border-transparent rounded font-bold tracking-wide text-sm px-5 py-2 focus:outline-none focus:shadow-outline bg-blue-500 text-gray-100 hover:bg-green-600 hover:text-white">Issue</button></a>
+                </td>
+                {% else %}
+                <td class="px-6 py-4  whitespace-nowrap text-sm font-medium text-red-600 hover:text-red-900">
+                  <button class="component border border-transparent opacity-50 rounded font-bold tracking-wide text-sm px-5 py-2 focus:outline-none focus:shadow-outline bg-blue-500 text-gray-100 hover:text-white">Issue</button>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+  			</table>
+		</div>
+		</div>
+	</div>
+</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 	</body>
 </html>

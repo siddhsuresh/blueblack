@@ -98,13 +98,13 @@
                   </td>
                   <td>
                 {% if b.request_for_renew %}
-          <div class="text-center px-4 py-2 text-xs font-bold rounded opacity-100 bg-blue-500 text-white">Request Pending</div>
+          <div class="text-center px-3 py-2 text-xs font-bold rounded opacity-100 bg-blue-500 text-white">Request Pending</div>
         {% elif b.request_success %}
-            <div class="text-center px-4 py-2 text-xs font-bold rounded opacity-100 bg-green-500 text-white">Request Approved</div>
+            <div class="text-center px-3 py-2 text-xs font-bold rounded opacity-100 bg-green-500 text-white">Request Approved</div>
         {% elif b.request_denied %}
-            <div class="text-center px-4 py-2 text-xs font-bold rounded opacity-100 bg-red-500 text-white">Request Denied</div>
+            <div class="text-center px-3 py-2 text-xs font-bold rounded opacity-100 bg-red-500 text-white">Request Denied</div>
         {% elif not b.can_renew %}
-            <div class="text-center px-4 py-2 text-xs font-bold rounded opacity-100 bg-yellow-600 text-white">Only 1 Renew At A Time</div>
+            <div class="text-center px-3 py-2 text-xs font-bold rounded opacity-100 bg-yellow-600 text-white">Only 1 Renew At A Time</div>
         {% else %}
         <a href="{% url 'book_renew' pk=b.id %}"><button class="component border border-transparent rounded font-bold tracking-wide text-sm px-5 py-2 focus:outline-none focus:shadow-outline bg-indigo-500 text-gray-100 hover:bg-yellow-600 hover:text-white">Request Renew</button></a>
         {% endif %}
