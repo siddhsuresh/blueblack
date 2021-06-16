@@ -1,5 +1,3 @@
-from .forms import NewBookForm, NewStudentForm
-from django.contrib.auth.forms import UserCreationForm
 from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, Student, ReturnBook, Staff, PublishingHouse, RenewRequest
 from django.db.models import Count
 from django.shortcuts import render, redirect
@@ -11,7 +9,6 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from django.http import HttpResponse
 from django.template.loader import get_template
-from xhtml2pdf import pisa
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.db.models import Q
