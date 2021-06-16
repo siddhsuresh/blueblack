@@ -204,7 +204,7 @@
       <div class="p-6">
         <h2 class="mb-8 text-xs font-semibold tracking-widest text-black uppercase title-font">Recommended Book</h2>
         <h4 class="mb-8 text-2xl font-semibold leading-none tracking-tighter text-black lg:text-3xl title-font text-green-500">Most Popular Book</h4>
-        <p class="mb-3 font-semibold hover:text-red-500 text-base leading-relaxed text-blueGray-500">{{book.title}} ({{number_of_time_issued}})</p>
+        <p class="mb-3 font-semibold text-base leading-relaxed text-blueGray-500">{{book.title}} ({{number_of_time_issued}})</p>
         <a href="{% url 'book' pk=book.id%}"><button class="w-full px-16 py-2 my-2 text-base font-medium text-white transition duration-500 ease-in-out transform border-black rounded-md bg-green-600 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-blue-900 uppercase">View Book</button></a>
       </div>
     </div>
