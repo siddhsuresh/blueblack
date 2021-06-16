@@ -3,7 +3,7 @@ from .models import Author, Genre, Book, BookIndividual, Language, IssueBook, St
 
 admin.site.site_header = "Library Admin"
 admin.site.site_title = "Library Admin Portal"
-admin.site.index_title = "Welcome to Library Database Management Portal"
+admin.site.index_title = "CSE2004 Library Database Management Project"
 
 class BookIndividualInline(admin.TabularInline):
     model = BookIndividual
