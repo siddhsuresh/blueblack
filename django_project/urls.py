@@ -23,7 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('history/', ReturnListView, name='history'),
     path('history/csv', History_view, name='csv'),
-    path('addbook/', add_book_view),
     path('allbooks/', all_books_view, name='allbooks'),
     path('search/', Search_View, name='search'),
     path('profile/', Profile_view, name='profile'),
