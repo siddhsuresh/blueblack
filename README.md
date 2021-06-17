@@ -12,7 +12,7 @@
 
 ## To Test It out
 * Donwload the Code
-* Put the location of pip which comes with python in your computer variables path. Check youtube
+* Put the location of pip which comes with python in your computer variables path.
 * In command prompt write
   * **pip install -r requirements.txt**
 * Then go to the location where you have saved the code and in that location in command prompt use 
