@@ -8,18 +8,3 @@
 * **admin.py** holds the code to register the models to the admin page which is used to view and change the data in the database.
 * **models.sql** holds the sql commands used by django to create the database in sqlite3 [just to see]
 
-## To Test It out
-* Donwload the Code
-* Put the location of pip which comes with python in your computer variables path.
-* In command prompt write
-  * **pip install -r requirements.txt**
-* Then go to the location where you have saved the code and in that location in command prompt use 
-  * **python manage.py makemigrations**
-  * **python manage.py migrate**
-  * **python manage.py runserver**
-* This would start the local host server at http://127.0.0.1:8000/
-* Use the http://127.0.0.1:8000/admin for the admin page
-
-## THE DATABSE 
-* The databse is stored in sqlite3 format and is in **db.sqlite3** file and can be viewed in an sqlite3 IDE like https://sqliteonline.com/
-
